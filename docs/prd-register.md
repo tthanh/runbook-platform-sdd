@@ -9,6 +9,7 @@ Skip recorded → PRD → Specify → Plan → Tasks → Implement → Released
 | # | Initiative | Objective | Status |
 |---|------------|-----------|--------|
 | 1 | 01-versioned-runbook-execution | Author versioned runbooks; an execution pins a version and records every step, so the post-incident review is computed, not reconstructed | Released |
+| 2 | 02-rich-domain-model | Structural: enforce domain invariants inside aggregates (pending ADR) | Registered |
 
 ## Artifact ledger
 
