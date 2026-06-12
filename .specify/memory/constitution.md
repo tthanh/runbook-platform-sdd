@@ -46,7 +46,12 @@
 
 ## Language (binding glossary)
 One meaning per word in specs, plans, tasks, code, events, commits:
-- No terms yet; the first workshop introduces them via amendment.
+- **Runbook** — a named, ordered procedure for responding to a recurring class
+  of incident; the authored, evolving thing, not a single run of it.
+- **Runbook Version** — an immutable snapshot of a runbook's steps, frozen and
+  identified at publish; editing a published runbook produces a new version, and
+  a published version's content never changes.
+- **Step** — one ordered instruction within a runbook version.
 New or changed terms enter via a workshop amendment here, never ad hoc.
 Flip condition: extract to docs/glossary.md when this section outgrows a
 screen or per-term history is needed.
@@ -88,3 +93,11 @@ screen or per-term history is needed.
   both the proposal and the acceptance their own commits gives each its
   own timestamp and author, and the written status is true at every
   point in history.
+- 2026-06-12: Glossary seeded (3 terms) — initiative 01 workshop, ratified by
+  the human reviewer: Runbook, Runbook Version, Step. The first PRD is scoped to
+  authoring only (create and publish a Runbook), so only these three land now.
+  The execution-slice terms (Execution, Version Pin, Step Record, Computed
+  Review, Incident) stay proposed in the workshop file and enter on a later
+  ratified workshop when that slice is built. Reason: terms enter the binding
+  glossary only when a real workshop ratifies them and a slice actually needs
+  them — never speculatively.
