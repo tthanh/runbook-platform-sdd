@@ -46,7 +46,7 @@ Hypotheses with stated basis.
 - **Time to first published version:** a new author creates and publishes a Runbook Version for a ~10-Step procedure in ≤10 minutes — basis: comparable to writing a short checklist document; treated as a hypothesis to correct, not a commitment.
 - **Authoring reaches publish:** ≥80% of created Runbooks reach at least one published Runbook Version, rather than remaining unpublished — basis: if publishing feels heavy, authors leave Runbooks unpublished; assumed, not validated.
 - **Version integrity:** zero changes to any Runbook Version after it is published — basis: an unchanging published version is the core promise of this slice; treated as a property to hold and measure, not a target to approach.
-- **Demo adoption:** roughly 5 Runbooks authored in the first month for a ~30-engineer organisation — basis: a team that size has a handful of common procedures; illustrative and assumed, to be corrected against real use.
+- **Early adoption:** roughly 5 Runbooks authored in the first month for a ~30-engineer organisation — basis: a team that size has a handful of common procedures; illustrative and assumed, to be corrected against real use.
 
 ## Open questions
 - **Referring to a published version.** How does an author identify a specific published Runbook Version — a human-meaningful label, or a system-assigned identifier? Open; to be settled before build. [NEEDS CLARIFICATION]
