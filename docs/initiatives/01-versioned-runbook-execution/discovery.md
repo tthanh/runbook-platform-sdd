@@ -42,9 +42,11 @@ Reviews stay unreliable → the same incidents recur, blameless postmortems lack
 ground truth, and audits rest on memory.
 
 ## Appetite
-**A couple of evenings.** The first slice is the smallest useful thing: pin a
-runbook version on an execution and record the steps as they happen, so the
-review is computed for that one run. If it overruns this, cut scope, don't extend.
+**A couple of evenings.** Following the workshop, the first slice is narrowed to
+**authoring only — create a runbook and publish a version.** Executing a runbook
+(pinning a version, recording steps, computing the review) is deferred to a later
+slice; it is the eventual payoff, but the first PRD only lays the authoring
+foundation. If it overruns this, cut scope, don't extend.
 
 ## Go–No-go + date
 **Go — 2026-06-12.** Built as a demonstration of the SDD method on a realistic

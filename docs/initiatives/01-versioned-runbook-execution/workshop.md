@@ -12,22 +12,21 @@ incident-management tool. Every leg of the test is a "no" → a workshop is
 required, sized to seeding the foundational language.
 
 > **Compile note.** This is a demonstration build with no live human board.
-> Acting as scribe, this file is compiled from the finalized discovery one-pager
+> Acting as scribe, this file was compiled from the finalized discovery one-pager
 > and the product definition in the register — not from a real Example Mapping
-> session. Treat the language section as a *proposed* first glossary for human
-> ratification. **The constitution glossary stays empty for now — no amendment
-> in this commit.** Per the workshop guide, terms only land in the constitution
-> after a real workshop is run and a reviewer checks fidelity (within 24h),
-> committed alongside that ratified workshop. Any term can be reopened as a
-> future hotspot.
+> session. The human reviewer has since **ratified the three authoring terms**
+> (Runbook, Runbook Version, Step) and **scoped the first PRD to authoring only —
+> create and publish a Runbook**. Those three terms are amended into the
+> constitution alongside this update; the five execution-slice terms remain
+> *proposed here only*. Any term can be reopened as a future hotspot.
 
 ## Attendees & date
 - Date: 2026-06-12
 - Facilitator: (demo) — compiled by AI scribe
 - Participants: none live (demonstration); framing sourced from
   [discovery.md](discovery.md)
-- Reviewer: **[PENDING human ratification]** — fresh eyes confirm the glossary
-  before /speckit.specify
+- Reviewer: human (ratified 2026-06-12) — confirmed the three authoring terms;
+  scoped the first PRD to authoring only
 
 ## Event timeline
 Past-tense events, in the order they occur across authoring and a single run:
@@ -40,18 +39,27 @@ Past-tense events, in the order they occur across authoring and a single run:
 6. **Execution closed** — the run ends; no further step records.
 7. **Review computed** — the timeline is derived from step records + pinned version.
 
+*First PRD scope:* events **1–2 only** (draft, publish). Events 3–7 belong to the
+deferred execution slice.
+
 ## Language decisions → constitution glossary amendments
-New or changed terms land in the constitution glossary, never ad hoc. The
-following are **proposed** for the (currently empty) binding glossary. They are
-**not yet amended into the constitution** — the glossary stays empty until a real
-workshop is run and the reviewer ratifies these terms; only then do they land in
-`.specify/memory/constitution.md`, committed with that ratified workshop:
+New or changed terms land in the constitution glossary, never ad hoc.
+
+### Ratified 2026-06-12 → amended into the constitution (first PRD vocabulary)
+These three authoring terms are the *only* language the first PRD uses.
 
 | Term | One meaning |
 |------|-------------|
 | **Runbook** | A named, ordered procedure for responding to a recurring class of incident. The authored, evolving thing — not a single run of it. |
 | **Runbook Version** | An immutable snapshot of a runbook's steps, frozen and identified at publish. Editing a published runbook produces a *new* version; a published version's content never changes. |
 | **Step** | One ordered instruction within a runbook version. |
+
+### Deferred → proposed here only, NOT in the constitution (later execution slice)
+These enter the glossary on a later ratified workshop, when the execution slice
+is built. The first PRD does not mention them.
+
+| Term | One meaning |
+|------|-------------|
 | **Execution** | A single run of a runbook against one incident. It pins exactly one runbook version when it starts and never re-pins. |
 | **Version Pin** | The fixed binding of an execution to the one runbook version in effect when the execution started. |
 | **Step Record** | The append-only captured outcome of acting on a step during an execution: which step, who, when, outcome (done/skipped/failed), optional note. The ground-truth fact of what was done. |
@@ -68,6 +76,10 @@ Each becomes a spike or an ADR — none die in notes.
 | H3 | **Step-ordering discipline** — must an execution follow the version's order, or may steps be done/skipped out of order? | Bounds what a Computed Review can truthfully claim | ADR | planner |
 | H4 | **Step-record persistence vs no-dual-writes** — records + any review projection | Constitution forbids dual-writes; cross-store propagation must ride the outbox | Spike (in /speckit.plan) | planner |
 | H5 | **Incident identity ownership** — own an Incident entity, or only a foreign reference to the external tool? | Sets the context boundary; affects every event that names an incident | ADR + boundary note | planner |
+
+*First PRD scope:* only **H1** (version identity scheme) is in play — publishing a
+version requires deciding how versions are identified. H2–H5 concern execution
+and defer with that slice.
 
 ## Boundary notes
 - **One bounded context for the first slice: `Runbook Execution`.** Authoring
