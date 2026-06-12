@@ -121,4 +121,4 @@ actual shape).
 
 ## Status + date
 
-Proposed — 2026-06-12
+Accepted — 2026-06-12 (accepted on explicit author instruction)
