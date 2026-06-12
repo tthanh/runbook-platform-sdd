@@ -1,6 +1,6 @@
 number: 1
 title: versioned-runbook-execution
-status: Tasks
+status: Implement
 created: 2026-06-12
 last-updated: 2026-06-12
 adrs: ["0001-runbook-version-identity (Accepted)", "0002-technology-stack (Accepted)"]
