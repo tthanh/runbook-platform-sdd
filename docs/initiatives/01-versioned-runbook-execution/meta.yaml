@@ -1,6 +1,6 @@
 number: 1
 title: versioned-runbook-execution
-status: Registered
+status: Discovery
 created: 2026-06-12
 last-updated: 2026-06-12
 adrs: []
