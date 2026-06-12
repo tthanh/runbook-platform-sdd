@@ -15,8 +15,11 @@ required, sized to seeding the foundational language.
 > Acting as scribe, this file is compiled from the finalized discovery one-pager
 > and the product definition in the register — not from a real Example Mapping
 > session. Treat the language section as a *proposed* first glossary for human
-> ratification; the constitution amendment lands in the same commit per the
-> workshop guide, and any term can be reopened as a future hotspot.
+> ratification. **The constitution glossary stays empty for now — no amendment
+> in this commit.** Per the workshop guide, terms only land in the constitution
+> after a real workshop is run and a reviewer checks fidelity (within 24h),
+> committed alongside that ratified workshop. Any term can be reopened as a
+> future hotspot.
 
 ## Attendees & date
 - Date: 2026-06-12
@@ -39,8 +42,10 @@ Past-tense events, in the order they occur across authoring and a single run:
 
 ## Language decisions → constitution glossary amendments
 New or changed terms land in the constitution glossary, never ad hoc. The
-following are proposed for the (currently empty) binding glossary and amended
-into `.specify/memory/constitution.md` in this same commit:
+following are **proposed** for the (currently empty) binding glossary. They are
+**not yet amended into the constitution** — the glossary stays empty until a real
+workshop is run and the reviewer ratifies these terms; only then do they land in
+`.specify/memory/constitution.md`, committed with that ratified workshop:
 
 | Term | One meaning |
 |------|-------------|

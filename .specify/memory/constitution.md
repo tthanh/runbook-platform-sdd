@@ -46,25 +46,7 @@
 
 ## Language (binding glossary)
 One meaning per word in specs, plans, tasks, code, events, commits:
-- **Runbook** — a named, ordered procedure for responding to a recurring class
-  of incident; the authored, evolving thing, not a single run of it.
-- **Runbook Version** — an immutable snapshot of a runbook's steps, frozen and
-  identified at publish; editing a published runbook produces a new version, and
-  a published version's content never changes.
-- **Step** — one ordered instruction within a runbook version.
-- **Execution** — a single run of a runbook against one incident; it pins exactly
-  one runbook version when it starts and never re-pins.
-- **Version Pin** — the fixed binding of an execution to the one runbook version
-  in effect when the execution started.
-- **Step Record** — the append-only captured outcome of acting on a step during
-  an execution (which step, who, when, outcome done/skipped/failed, optional
-  note); the ground-truth fact of what was done.
-- **Computed Review** — the post-incident timeline derived mechanically from an
-  execution's step records against its pinned version; computed, never authored
-  from memory.
-- **Incident** — the real-world event an execution responds to; a boundary term
-  whose identity is owned by an external incident-management tool, referenced
-  here, not sourced here.
+- No terms yet; the first workshop introduces them via amendment.
 New or changed terms enter via a workshop amendment here, never ad hoc.
 Flip condition: extract to docs/glossary.md when this section outgrows a
 screen or per-term history is needed.
@@ -94,21 +76,15 @@ screen or per-term history is needed.
   (inputs, owned statuses). Human pipeline rules moved to templates and
   README — they are not agent-actionable and were paying context tax in
   the hot path.
-- 2026-06-12: Decisions section finalized — ADRs drafted Proposed
-  during /speckit.plan with human-context questions asked before the
-  Decision field; acceptance split into two recorded events (proposal
-  merges as Proposed; acceptance is a separate human-authored status
-  commit on main); tasks blocked until acceptance; immutability scoped
-  to Accepted with a non-semantic correction valve. Reason: approval and
+- 2026-06-12: Decisions section finalized — the section now *requires*
+  that ADRs be drafted Proposed during /speckit.plan with human-context
+  questions asked before the Decision field; acceptance split into two
+  recorded events (proposal merges as Proposed; acceptance is a separate
+  human-authored status commit on main); tasks blocked until acceptance;
+  immutability scoped to Accepted with a non-semantic correction valve.
+  (This records the rule being written; no ADR has been drafted yet.)
+  Reason: approval and
   the state it approves must never live in different places — making
   both the proposal and the acceptance their own commits gives each its
   own timestamp and author, and the written status is true at every
   point in history.
-- 2026-06-12: Glossary seeded — the first workshop (initiative
-  01-versioned-runbook-execution) introduced the foundational terms
-  Runbook, Runbook Version, Step, Execution, Version Pin, Step Record,
-  Computed Review, and Incident (boundary term). Reason: the glossary
-  started empty by design; these are the words the PRD and spec for the
-  first initiative are written in, ratified from the workshop and
-  committed alongside it. Pending human ratification of the workshop
-  reviewer before /speckit.specify.
