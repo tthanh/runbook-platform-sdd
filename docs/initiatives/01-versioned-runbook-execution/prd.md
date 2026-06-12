@@ -1,7 +1,6 @@
 # PRD — 01-versioned-runbook-execution (first slice: authoring)
 
 ## Context
-This is a demonstration build of the SDD method applied to a realistic problem.
 Teams that respond to recurring problems rely on written procedures.
 Those procedures drift: they are edited in place, and no one can later say which wording was in effect at a given time.
 This initiative gives a procedure a stable shape.
@@ -13,7 +12,7 @@ The scope is creating a Runbook and publishing a Runbook Version.
 The eventual payoff — carrying a published procedure out during a live response, and producing an after-the-fact account of what was done — is deliberately deferred to a later slice; this slice lays the authoring foundation that later work stands on.
 
 Users are **authors**: the people who write and maintain these procedures.
-Demand is an accepted assumption for the demonstration, carried with illustrative figures rather than validated evidence.
+Demand is an accepted assumption, carried with illustrative figures rather than validated evidence.
 The build appetite for this slice is deliberately small — a couple of evenings — which is itself why the scope is authoring only.
 This initiative touches no entries in the architecture conflict register (it is currently empty).
 
@@ -45,8 +44,8 @@ The Objective could tempt an eager builder into the whole product; these are fen
 ## Metrics
 Hypotheses with stated basis.
 - **Time to first published version:** a new author creates and publishes a Runbook Version for a ~10-Step procedure in ≤10 minutes — basis: comparable to writing a short checklist document; treated as a hypothesis to correct, not a commitment.
-- **Authoring reaches publish:** ≥80% of created Runbooks reach at least one published Runbook Version, rather than remaining unpublished — basis: if publishing feels heavy, authors leave Runbooks unpublished; assumed for the demo, not validated.
-- **Version integrity:** zero changes to any Runbook Version after it is published, across the demo — basis: an unchanging published version is the core promise of this slice; treated as a property to hold and measure, not a target to approach.
+- **Authoring reaches publish:** ≥80% of created Runbooks reach at least one published Runbook Version, rather than remaining unpublished — basis: if publishing feels heavy, authors leave Runbooks unpublished; assumed, not validated.
+- **Version integrity:** zero changes to any Runbook Version after it is published — basis: an unchanging published version is the core promise of this slice; treated as a property to hold and measure, not a target to approach.
 - **Demo adoption:** roughly 5 Runbooks authored in the first month for a ~30-engineer organisation — basis: a team that size has a handful of common procedures; illustrative and assumed, to be corrected against real use.
 
 ## Open questions
