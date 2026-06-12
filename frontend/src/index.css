@@ -1,0 +1,134 @@
+:root {
+  --text: #1f2937;
+  --muted: #6b7280;
+  --bg: #ffffff;
+  --border: #e5e7eb;
+  --accent: #2563eb;
+  --error: #b91c1c;
+  --notice: #15803d;
+  --badge-bg: #eff6ff;
+
+  font: 16px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e5e7eb;
+    --muted: #9ca3af;
+    --bg: #111318;
+    --border: #2e303a;
+    --accent: #60a5fa;
+    --error: #f87171;
+    --notice: #4ade80;
+    --badge-bg: #1e293b;
+  }
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+h1 {
+  font-size: 1.6rem;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin-top: 2rem;
+}
+
+a {
+  color: var(--accent);
+}
+
+input {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.4rem 0.6rem;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.runbook-list,
+.version-history {
+  list-style: none;
+  padding: 0;
+}
+
+.runbook-list li,
+.version-history li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.step-editor {
+  padding-left: 1.5rem;
+}
+
+.step-editor li {
+  margin: 0.4rem 0;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.step-editor input {
+  flex: 1;
+}
+
+.step-editor .add-row {
+  list-style: none;
+  margin-left: -1.5rem;
+}
+
+.version-steps li {
+  margin: 0.5rem 0;
+}
+
+.badge {
+  background: var(--badge-bg);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  padding: 0.1rem 0.6rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.error {
+  color: var(--error);
+}
+
+.notice {
+  color: var(--notice);
+}
