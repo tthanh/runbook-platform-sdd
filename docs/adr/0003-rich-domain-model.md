@@ -121,4 +121,21 @@ actual shape).
 
 ## Status + date
 
-Proposed — 2026-06-12
+Accepted — 2026-06-12 (accepted on explicit author instruction)
+
+## Implementation notes (dated, appended per the constitution)
+
+- 2026-06-12: The serialization-friction trade-off materialized concretely:
+  EF Core treats navigation-discovered entities with client-set Guid keys as
+  existing rows (UPDATE … 0 rows → `DbUpdateConcurrencyException`), so the
+  endpoints explicitly `Add` the new Step/Runbook Version graphs after the
+  aggregate method runs. This is change-tracker bookkeeping at the seam, not
+  a domain rule — the invariants stay inside the aggregate.
+- 2026-06-12: `Rename` (named in the Decision's method list) is not
+  implemented: no rename code path exists in the shipped slice, so the
+  method would be dead code (constitution: complexity is earned). The
+  Decision reads as "where a state change exists, it goes through a
+  behavior method."
+- 2026-06-12: T005 needed zero mapping configuration — EF Core discovered
+  the `_steps`/`_versions` backing fields by convention; schema verified
+  byte-identical to v0.1.0.

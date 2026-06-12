@@ -14,6 +14,21 @@ public static class RunbookEndpoints
     {
         var api = app.MapGroup("/api/runbooks");
 
+        // ADR-0003: invariants live in the aggregate and surface as
+        // DomainException — mapped to the { error } 400 shape in exactly
+        // one place: this group filter.
+        api.AddEndpointFilter(async (context, next) =>
+        {
+            try
+            {
+                return await next(context);
+            }
+            catch (DomainException e)
+            {
+                return Results.BadRequest(new { error = e.Message });
+            }
+        });
+
         // FR-009: list all Runbooks, including those with nothing published.
         api.MapGet("/", async (AppDbContext db) =>
         {
@@ -25,22 +40,14 @@ public static class RunbookEndpoints
             {
                 id = r.Id,
                 name = r.Name,
-                currentVersionNumber = CurrentVersionNumber(r),
+                currentVersionNumber = r.CurrentVersionNumber,
             }));
         });
 
         // FR-001: create a Runbook with a non-empty name.
         api.MapPost("/", async (CreateRunbookRequest request, AppDbContext db) =>
         {
-            if (string.IsNullOrWhiteSpace(request.Name))
-                return Results.BadRequest(new { error = "A name is required." });
-
-            var runbook = new Runbook
-            {
-                Id = Guid.NewGuid(),
-                Name = request.Name.Trim(),
-                CreatedAt = DateTimeOffset.UtcNow,
-            };
+            var runbook = Runbook.Create(request.Name);
             db.Runbooks.Add(runbook);
             await db.SaveChangesAsync();
 
@@ -61,25 +68,15 @@ public static class RunbookEndpoints
             var runbook = await LoadRunbook(db, id);
             if (runbook is null) return NotFound();
 
-            if (request.Steps.Any(s => string.IsNullOrWhiteSpace(s.Text)))
-                return Results.BadRequest(new { error = "A Step needs content." });
-
-            var newSteps = request.Steps
-                .Select((s, i) => new Step
-                {
-                    Id = Guid.NewGuid(),
-                    RunbookId = runbook.Id,
-                    Position = i + 1,
-                    Text = s.Text.Trim(),
-                })
-                .ToList();
-            db.Steps.RemoveRange(runbook.Steps);
-            db.Steps.AddRange(newSteps);
+            runbook.ReplaceSteps(request.Steps.Select(s => s.Text));
+            // EF treats navigation-discovered entities with client-set Guid
+            // keys as existing rows; mark the replacements as inserts.
+            db.Steps.AddRange(runbook.Steps);
             await db.SaveChangesAsync();
 
             return Results.Ok(new
             {
-                steps = newSteps.Select(s => new { s.Position, s.Text }),
+                steps = runbook.Steps.Select(s => new { s.Position, s.Text }),
             });
         });
 
@@ -101,12 +98,8 @@ public static class RunbookEndpoints
         id = runbook.Id,
         name = runbook.Name,
         steps = runbook.Steps.OrderBy(s => s.Position).Select(s => new { s.Position, s.Text }),
-        currentVersionNumber = CurrentVersionNumber(runbook),
+        currentVersionNumber = runbook.CurrentVersionNumber,
         versions = runbook.Versions.OrderBy(v => v.Number)
             .Select(v => new { v.Number, v.PublishedAt }),
     };
-
-    // FR-008: "current" is the highest published number — derived, not stored.
-    internal static int? CurrentVersionNumber(Runbook runbook) =>
-        runbook.Versions.Count == 0 ? null : runbook.Versions.Max(v => v.Number);
 }
