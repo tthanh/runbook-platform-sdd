@@ -81,6 +81,10 @@ Each becomes a spike or an ADR — none die in notes.
 version requires deciding how versions are identified. H2–H5 concern execution
 and defer with that slice.
 
+*H1 direction (2026-06-12):* author-facing identity is a **sequential version
+number** (1, 2, 3, …), decided alongside the PRD. The plan-time ADR formalizes
+the scheme and records the alternatives considered (content hash, semver).
+
 ## Boundary notes
 - **One bounded context for the first slice: `Runbook Execution`.** Authoring
   (runbooks, versions, steps) and running (executions, step records, computed

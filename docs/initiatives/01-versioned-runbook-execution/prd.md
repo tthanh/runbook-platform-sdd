@@ -24,6 +24,7 @@ Publishing freezes the current Steps into a Runbook Version whose content never 
 Editing a published Runbook produces a new Runbook Version; earlier Runbook Versions remain available and unchanged.
 An author edits the Runbook's Steps directly, and each publish captures the Runbook's current Steps as a new Runbook Version; a Runbook may exist before its first Runbook Version is published.
 The most recently published Runbook Version is the current one, shown to authors by default; earlier Runbook Versions stay viewable.
+Each published Runbook Version is identified by a version number that increases with each publish — the first published version is 1, the next 2, and so on.
 
 ## Non-goals
 The Objective could tempt an eager builder into the whole product; these are fenced out of this slice:
@@ -49,6 +50,5 @@ Hypotheses with stated basis.
 - **Early adoption:** roughly 5 Runbooks authored in the first month for a ~30-engineer organisation — basis: a team that size has a handful of common procedures; illustrative and assumed, to be corrected against real use.
 
 ## Open questions
-- **Referring to a published version.** How does an author identify a specific published Runbook Version — a human-meaningful label, or a system-assigned identifier? Open; to be settled before build. [NEEDS CLARIFICATION]
 - **Metrics are assumed, not validated.** The figures above remain hypotheses until the platform serves real authors.
 - **Deferred capability.** Whether a published procedure must be followed in its given order when later carried out, and who concludes a response, are out of scope for this slice — recorded here so they are not lost, and intentionally not answered now.
