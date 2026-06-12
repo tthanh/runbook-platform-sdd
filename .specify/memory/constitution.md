@@ -76,12 +76,14 @@ screen or per-term history is needed.
   (inputs, owned statuses). Human pipeline rules moved to templates and
   README — they are not agent-actionable and were paying context tax in
   the hot path.
-- 2026-06-12: Decisions section finalized — ADRs drafted Proposed
-  during /speckit.plan with human-context questions asked before the
-  Decision field; acceptance split into two recorded events (proposal
-  merges as Proposed; acceptance is a separate human-authored status
-  commit on main); tasks blocked until acceptance; immutability scoped
-  to Accepted with a non-semantic correction valve. Reason: approval and
+- 2026-06-12: Decisions section finalized — the section now *requires*
+  that ADRs be drafted Proposed during /speckit.plan with human-context
+  questions asked before the Decision field; acceptance split into two
+  recorded events (proposal merges as Proposed; acceptance is a separate
+  human-authored status commit on main); tasks blocked until acceptance;
+  immutability scoped to Accepted with a non-semantic correction valve.
+  (This records the rule being written; no ADR has been drafted yet.)
+  Reason: approval and
   the state it approves must never live in different places — making
   both the proposal and the acceptance their own commits gives each its
   own timestamp and author, and the written status is true at every

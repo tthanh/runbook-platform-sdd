@@ -1,13 +1,9 @@
 # Discovery — 01-versioned-runbook-execution
 
-> **DRAFT — strawman for facilitation, NOT finalized.** Status remains
-> `Registered`. Framing below is a starting point to react to; the items marked
-> **[PENDING author input]** are decisions only the author can make and must be
-> answered before this clears to `Discovery`:
-> 1. Demand — is the reconstruction pain actually felt, or assumed?
-> 2. Appetite — how much for the first slice?
-> 3. Constraints — team capacity, compliance/retention, tools it must sit beside.
-> 4. Go / No-go verdict + date.
+> **FINALIZED — 2026-06-12.** Author inputs resolved; verdict **Go**. Register
+> moves `Registered → Discovery`. This is a **demonstration platform**, so demand
+> is treated as a stated assumption with illustrative numbers rather than
+> validated field evidence — see Evidence below.
 
 Discovery test: this is a **new problem** → full one-pager (not an inherited
 consequence).
@@ -25,25 +21,33 @@ the pain, not the versioned-runbook answer.)
 - **Users:** on-call / incident responders running procedures under pressure;
   the incident commander; the reviewer who writes the postmortem.
 - **Payer:** the engineering / reliability org carrying downtime cost and audit
-  obligations. [PENDING author input — who actually funds this]
-- **Operators / constrainers:** [PENDING author input — team capacity; any
-  compliance/retention requirements; existing tools (e.g. PagerDuty, incident.io,
-  Git) this must coexist with]
+  obligations. (Assumed for the demo: a mid-size SRE org of ~30 engineers.)
+- **Operators / constrainers:** the first slice is modeled on the **core
+  incident.io-style use case** — a "page" / runbook that responders work through
+  during an incident. It should sit alongside such tools rather than replace
+  them; no hard compliance/retention or team-capacity constraints bind the first
+  slice (demonstration build).
 
 ## Evidence
 Postmortem timeline reconstruction is a widely-felt pain in SRE practice;
 "what did we actually do, in what order" is routinely rebuilt from chat logs.
-General knowledge, **not validated demand**. [PENDING author input — direct
-evidence or known users feeling this, vs. assumed]
+**Assumed demand, not validated** — this is a demonstration platform, so we
+proceed on the hypothesis with illustrative figures rather than field evidence.
+Working numbers for the demo: ~30-engineer SRE org, ~4 reviewable incidents/month,
+~45 min spent reconstructing each timeline. These are stated assumptions to be
+revisited if the platform ever serves real users.
 
 ## Cost of doing nothing
 Reviews stay unreliable → the same incidents recur, blameless postmortems lack
 ground truth, and audits rest on memory.
 
 ## Appetite
-[PENDING author input — how much for the first slice, e.g. a couple of evenings]
+**A couple of evenings.** The first slice is the smallest useful thing: pin a
+runbook version on an execution and record the steps as they happen, so the
+review is computed for that one run. If it overruns this, cut scope, don't extend.
 
 ## Go–No-go + date
-[PENDING author verdict + date] — a no-go would look like: existing incident
-tools already capture this well enough, or the reconstruction pain isn't
-actually felt.
+**Go — 2026-06-12.** Built as a demonstration of the SDD method on a realistic
+problem; demand is an accepted assumption. A no-go would have looked like:
+existing incident tools already capture this well enough, or the pain wasn't
+worth modeling — neither blocks a demo build.
