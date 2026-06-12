@@ -1,8 +1,8 @@
 number: 1
 title: versioned-runbook-execution
-status: Specify
+status: Plan
 created: 2026-06-12
 last-updated: 2026-06-12
-adrs: []
+adrs: ["0001-runbook-version-identity (Proposed)", "0002-technology-stack (Proposed)"]
 spec-folder: specs/001-runbook-authoring
 release-tag: null
