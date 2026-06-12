@@ -1,6 +1,6 @@
 number: 2
 title: rich-domain-model
-status: Tasks
+status: Implement
 created: 2026-06-12
 last-updated: 2026-06-12
 adrs: ["0003-rich-domain-model (Accepted)"]
