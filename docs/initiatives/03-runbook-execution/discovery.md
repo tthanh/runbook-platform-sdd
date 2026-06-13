@@ -13,6 +13,6 @@ Payer: the engineering / reliability org carrying downtime cost and audit obliga
 
 Evidence: unchanged from 01 — assumed demand, not validated; illustrative figures (~4 reviewable incidents/month, ~45 min/timeline reconstructed) carried as hypotheses.
 
-Appetite: [NEEDS CLARIFICATION: not yet set by a discovery one-pager for this slice. 01's "couple of evenings" sized authoring only; execution is larger and needs its own ceiling before /speckit.plan.]
+Appetite: a couple of evenings (set during PRD-03 clarification, 2026-06-13), matching slice 01 — cut scope rather than extend. Scope was trimmed to fit: closing an Execution is a manual action (incident-driven close deferred), and the Step Record's actor ("who") is deferred until accounts exist.
 
 Go/No-go: Go — 2026-06-13. The authoring slice is Released (v0.1.0); v0.1.1 hardened the domain model (ADR-0003). The foundation this slice stands on is in place.

@@ -52,6 +52,20 @@ One meaning per word in specs, plans, tasks, code, events, commits:
   identified at publish; editing a published runbook produces a new version, and
   a published version's content never changes.
 - **Step** — one ordered instruction within a runbook version.
+- **Execution** — a single run of a runbook against one incident; it pins exactly
+  one runbook version when it starts and never re-pins.
+- **Version Pin** — the fixed binding of an execution to the one runbook version
+  in effect when the execution started.
+- **Step Record** — the append-only captured outcome of acting on a step during
+  an execution: which step, when, outcome (done/skipped/failed), optional note;
+  the ground-truth fact of what was done. The actor ("who") is deferred until
+  authentication exists — no slice captures it yet.
+- **Computed Review** — the post-incident timeline derived mechanically from an
+  execution's step records against its pinned version; computed, never authored
+  from memory.
+- **Incident** — the real-world event an execution responds to; a boundary term —
+  identity is owned by an external incident-management tool, and we hold a
+  reference, not the source of truth.
 New or changed terms enter via a workshop amendment here, never ad hoc.
 Flip condition: extract to docs/glossary.md when this section outgrows a
 screen or per-term history is needed.
@@ -101,3 +115,18 @@ screen or per-term history is needed.
   ratified workshop when that slice is built. Reason: terms enter the binding
   glossary only when a real workshop ratifies them and a slice actually needs
   them — never speculatively.
+- 2026-06-13: Step Record narrowed — "who" deferred. During PRD-03 clarification
+  the human reviewer chose not to capture the actor in the runbook-execution
+  slice: no authentication exists in any slice, so "who" would be unverified free
+  text. The Step Record definition drops "who" until accounts exist, keeping the
+  binding glossary consistent with what the slice actually captures. Reason: the
+  glossary must match the spec — deferring an unverifiable field beats recording
+  noise or carrying a standing spec-vs-glossary mismatch.
+- 2026-06-13: Glossary extended (5 terms) — initiative 03 workshop, ratified by
+  the human reviewer: Execution, Version Pin, Step Record, Computed Review,
+  Incident. These are the execution-slice terms held as proposed since the 01
+  workshop; the runbook-execution slice is now being built and needs them, so
+  they enter the binding glossary per the rule above (ratified + a slice needs
+  them). Glossary now holds 8 terms — still under a screen, so the flip to
+  docs/glossary.md does not trip. Reason: the deferred half of 01 is being
+  delivered; the language enters exactly when the slice requires it.
