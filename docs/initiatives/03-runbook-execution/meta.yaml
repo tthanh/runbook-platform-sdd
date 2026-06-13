@@ -1,8 +1,8 @@
 number: 3
 title: runbook-execution
-status: PRD
+status: Specify
 created: 2026-06-13
 last-updated: 2026-06-13
 adrs: []
-spec-folder: null
+spec-folder: specs/003-runbook-execution
 release-tag: null
