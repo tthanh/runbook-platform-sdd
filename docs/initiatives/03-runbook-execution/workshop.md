@@ -17,10 +17,9 @@ No fresh Example Mapping is re-run; this file ratifies the deferred half of 01.
 | **Computed Review** | The post-incident timeline derived mechanically from an execution's step records against its pinned version — computed, never authored from memory. |
 | **Incident** | The real-world event an execution responds to. *Boundary term:* identity is owned by an external incident-management tool; we hold a reference, not the source of truth. |
 
-> **Human gate (not done by the PRD author):** these five terms enter the binding
-> glossary in `.specify/memory/constitution.md` only on a human-ratified amendment,
-> per the constitution's workshop rule. Until then they are this slice's working
-> vocabulary, used by the PRD and pending ratification.
+> **Ratified 2026-06-13.** These five terms were ratified by the human reviewer
+> and amended into the binding glossary in `.specify/memory/constitution.md`
+> (glossary now holds 8 terms). They are no longer proposed — they are binding.
 
 ## Events delivered by this slice (3–7 from 01's timeline)
 
