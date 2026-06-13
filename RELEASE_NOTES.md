@@ -1,3 +1,33 @@
+# Release Notes — v0.1.1
+
+**Released**: 2026-06-13
+**Initiative**: 02-rich-domain-model (structural refactor)
+**Spec folder**: specs/002-rich-domain-model/
+**ADRs**: ADR-0003 (Rich domain model — invariants enforced inside aggregates)
+
+## What ships
+
+No user-facing change. Every domain invariant moved out of the HTTP handlers and into the
+aggregates: `Runbook` is now the aggregate root and owns the publish gate (FR-003), the version
+freeze (FR-004/FR-006), and sequential numbering (FR-005, ADR-0001) through behavior methods
+(`Create` / `ReplaceSteps` / `Publish`). Runbook Version and its frozen Steps are construct-only.
+A single `DomainException` is mapped once at the endpoint seam to the existing `400 { error }` shape.
+
+## Acceptance contract
+
+- The 18 integration tests pass **unmodified** — verified, and the refactor commit touched zero
+  files under `backend/tests/`. Any test edit would have meant behavior changed.
+- HTTP contract (`specs/001-runbook-authoring/contracts/http-api.md`) unchanged.
+- Database schema unchanged — conflict register **C-002** untouched, no migrations introduced.
+- Functional coverage unchanged: FR-001–FR-011, same tests, same ids. No new FRs.
+
+## Architectural outcome
+
+Conflict register gains **C-004** (ADR-0003): domain invariants live inside aggregates; HTTP
+handlers stay thin. Future slices add new invariants in aggregate behavior, not in endpoints.
+
+---
+
 # Release Notes — v0.1.0
 
 **Released**: 2026-06-12
