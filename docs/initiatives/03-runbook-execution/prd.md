@@ -27,6 +27,7 @@ The architecture conflict register is expected to be touched — C-001 (a run bi
 Let a responder run a published Runbook Version against an incident and obtain a computed account of what was done that reflects exactly the recorded outcomes.
 
 An Execution starts from a reference to an external incident and a chosen Runbook, and pins that Runbook's current (most recently published) Version at the moment it starts — consistent with slice 01, where the current Version is the one shown by default.
+Only a Runbook with at least one published Version can be executed; an Execution cannot start against a Runbook that has never been published (slice 01 allows such Runbooks to exist).
 The pin holds for the entire life of the Execution: if a newer Runbook Version is published while the run is in flight, the running Execution keeps showing and recording against its pinned Version and is never re-pinned.
 
 While an Execution is open, the responder marks each Step with an outcome — done, skipped, or failed — and may attach a note.
@@ -57,6 +58,7 @@ The Objective could tempt an eager builder well past this slice; these are fence
 - **Multiple people recording to one Execution.** An Execution is driven by a single person this slice, upholding the architecture's single-user NFR (no concurrent-write guarantees); concurrent multi-responder recording is out of scope.
 - **Real-time multi-responder collaboration or live presence.** Out of scope.
 - **Authentication, accounts, or permissions.** Running and recording are open, consistent with the prior slices.
+- **Browsing or searching past Executions.** This slice runs an Execution and shows its Computed Review for that single run; a browsable list, history, or search across Executions is out of scope.
 - **Cross-Execution analytics or dashboards.** Reporting across many runs is out of scope.
 - **Comparing or diffing Executions or Reviews.** Out of scope.
 - **Notifications or integrations** beyond consuming a reference to an external incident.
