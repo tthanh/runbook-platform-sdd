@@ -13,7 +13,7 @@ No fresh Example Mapping is re-run; this file ratifies the deferred half of 01.
 |------|-------------|
 | **Execution** | A single run of a runbook against one incident. It pins exactly one runbook version when it starts and never re-pins. |
 | **Version Pin** | The fixed binding of an execution to the one runbook version in effect when the execution started. |
-| **Step Record** | The append-only captured outcome of acting on a step during an execution: which step, who, when, outcome (done/skipped/failed), optional note. The ground-truth fact of what was done. |
+| **Step Record** | The append-only captured outcome of acting on a step during an execution: which step, when, outcome (done/skipped/failed), optional note. The ground-truth fact of what was done. (Ratified with "who" deferred — PRD-03 clarification 2026-06-13: no accounts exist, so the actor is not captured until authentication does.) |
 | **Computed Review** | The post-incident timeline derived mechanically from an execution's step records against its pinned version — computed, never authored from memory. |
 | **Incident** | The real-world event an execution responds to. *Boundary term:* identity is owned by an external incident-management tool; we hold a reference, not the source of truth. |
 

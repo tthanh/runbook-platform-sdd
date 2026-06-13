@@ -57,8 +57,9 @@ One meaning per word in specs, plans, tasks, code, events, commits:
 - **Version Pin** — the fixed binding of an execution to the one runbook version
   in effect when the execution started.
 - **Step Record** — the append-only captured outcome of acting on a step during
-  an execution: which step, who, when, outcome (done/skipped/failed), optional
-  note; the ground-truth fact of what was done.
+  an execution: which step, when, outcome (done/skipped/failed), optional note;
+  the ground-truth fact of what was done. The actor ("who") is deferred until
+  authentication exists — no slice captures it yet.
 - **Computed Review** — the post-incident timeline derived mechanically from an
   execution's step records against its pinned version; computed, never authored
   from memory.
@@ -114,6 +115,13 @@ screen or per-term history is needed.
   ratified workshop when that slice is built. Reason: terms enter the binding
   glossary only when a real workshop ratifies them and a slice actually needs
   them — never speculatively.
+- 2026-06-13: Step Record narrowed — "who" deferred. During PRD-03 clarification
+  the human reviewer chose not to capture the actor in the runbook-execution
+  slice: no authentication exists in any slice, so "who" would be unverified free
+  text. The Step Record definition drops "who" until accounts exist, keeping the
+  binding glossary consistent with what the slice actually captures. Reason: the
+  glossary must match the spec — deferring an unverifiable field beats recording
+  noise or carrying a standing spec-vs-glossary mismatch.
 - 2026-06-13: Glossary extended (5 terms) — initiative 03 workshop, ratified by
   the human reviewer: Execution, Version Pin, Step Record, Computed Review,
   Incident. These are the execution-slice terms held as proposed since the 01
