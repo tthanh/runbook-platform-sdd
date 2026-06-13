@@ -12,6 +12,12 @@
 
 Glossary terms used (binding, per the constitution): **Runbook**, **Runbook Version**, **Step**, **Execution**, **Version Pin**, **Step Record**, **Computed Review**, **Incident**.
 
+## Clarifications
+
+### Session 2026-06-13
+
+- Q: When a responder starts an Execution for an Incident that already has one, what happens? → A: Resume the existing open Execution if one is open (the responder continues recording); refuse if the Incident's Execution is already closed (re-opening is a non-goal). This also serves as the way a responder returns to an in-flight Execution.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Run a published procedure and capture each Step outcome (Priority: P1)
@@ -29,6 +35,8 @@ A responder, facing a live incident, starts an Execution against a chosen Runboo
 3. WHILE an Execution is open, WHEN a responder marks a Step of the pinned Runbook Version with an outcome of done, skipped, or failed (optionally with a note), THE SYSTEM SHALL append exactly one Step Record capturing that Step, the outcome, the note, and the time.
 4. WHEN a responder marks Steps in an order other than the pinned Runbook Version's order, THE SYSTEM SHALL accept the marks and capture the order in which the Step Records were recorded.
 5. WHEN a responder marks a Step that already has a Step Record (for example, failed earlier and now done), THE SYSTEM SHALL append a new Step Record and treat the most recent outcome as that Step's end state.
+6. WHEN a responder starts an Execution for an Incident that already has an open Execution, THE SYSTEM SHALL return that open Execution rather than create a second, so the responder continues recording against the same run.
+7. WHEN a responder starts an Execution for an Incident whose Execution is already closed, THE SYSTEM SHALL refuse and tell the responder the Incident already has a completed Execution.
 
 ---
 
@@ -74,7 +82,8 @@ While an Execution is in flight, an author may publish a new Runbook Version of 
 - A Step never acted on during the Execution: shown in the Computed Review as "not reached," never as skipped.
 - An Execution closed with no Step Records, or only some Steps recorded: the Computed Review shows every unrecorded pinned-Version Step as "not reached."
 - Recording a Step outcome against an already-closed Execution: refused.
-- Starting a second Execution for an incident that already has one: not supported in this slice (one Execution per incident reference).
+- Starting an Execution for an incident that already has an **open** one: returns the existing open Execution so the responder can continue (the path back to an in-flight run).
+- Starting an Execution for an incident whose Execution is already **closed**: refused; the responder is told the incident already has a completed Execution (re-opening is a non-goal).
 
 ## Requirements *(mandatory)*
 
@@ -94,7 +103,7 @@ While an Execution is in flight, an author may publish a new Runbook Version of 
 - **FR-012**: In the Computed Review, the system MUST represent a Step of the pinned Runbook Version that has no Step Record as "not reached," distinct from a Step explicitly marked skipped.
 - **FR-013**: The system MUST NOT allow a Computed Review to be authored or edited by hand; it is derived solely from the Step Records and the pinned Runbook Version.
 - **FR-014**: The system MUST hold only a reference to the external Incident and MUST NOT create, own, or manage Incident identity.
-- **FR-015**: The system MUST associate at most one Execution with a given Incident reference in this slice.
+- **FR-015**: The system MUST associate at most one Execution with a given Incident reference in this slice. WHEN a responder starts an Execution for an Incident that already has an open Execution, the system MUST return that open Execution instead of creating a second; WHEN the Incident's Execution is already closed, the system MUST refuse to start a new Execution.
 - **FR-016**: The system MUST treat an Execution as driven by a single person and MUST NOT provide concurrent multi-responder recording in this slice.
 - **FR-017**: The system MUST NOT require sign-in, accounts, or permissions for any execution action in this slice.
 
