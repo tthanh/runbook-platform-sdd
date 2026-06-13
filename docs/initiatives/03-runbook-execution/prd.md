@@ -24,19 +24,20 @@ They were ratified into the binding glossary on 2026-06-13; Step Record's "who" 
 The architecture conflict register is expected to be touched — C-001 (a run binds to a specific published version), C-002 (this slice introduces concepts that did not exist before), C-003 (responder views), and C-004 (the new run-time rules) — but which entries bind, and how, is determined at plan time, not here.
 
 ## Objective
-Let a responder run a published Runbook Version against an incident and obtain a faithful, computed account of what was done.
+Let a responder run a published Runbook Version against an incident and obtain a computed account of what was done that reflects exactly the recorded outcomes.
 
-An Execution starts from a reference to an external incident and pins exactly one published Runbook Version at the moment it starts.
+An Execution starts from a reference to an external incident and a chosen Runbook, and pins that Runbook's current (most recently published) Version at the moment it starts — consistent with slice 01, where the current Version is the one shown by default.
 The pin holds for the entire life of the Execution: if a newer Runbook Version is published while the run is in flight, the running Execution keeps showing and recording against its pinned Version and is never re-pinned.
 
 While an Execution is open, the responder marks each Step with an outcome — done, skipped, or failed — and may attach a note.
 Each mark appends one Step Record and is never overwritten; the Step Records are the append-only ground truth of the run.
+A Step may be marked more than once — for example failed, then done after a retry — and each mark appends a new Step Record; the most recent mark is that Step's end state.
 The responder may act on Steps in the order the incident demands rather than being forced to follow the Version's order; the record captures the true order in which Steps were acted on.
 
 A responder or incident commander explicitly closes the Execution when the response is over; closing is a manual action in this slice.
 A closed Execution accepts no further Step Records.
 
-A Computed Review is derived from a closed Execution: it lays out, in order, what was done against the pinned Version's Steps — which were done, skipped, or failed, each with its note and when it happened.
+A Computed Review is derived from a closed Execution: it lays out, in the chronological order the outcomes were recorded, what was done against the pinned Version's Steps — which were done, skipped, or failed, each with its note and when it happened. A Step of the pinned Version that has no Step Record appears as **not reached** — distinct from a Step explicitly marked skipped. A Step marked more than once contributes one entry per mark, in sequence, and its end state is the most recent outcome.
 The Computed Review reflects exactly the Step Records it derives from; it is never authored or edited by hand.
 
 ## Non-goals
@@ -46,11 +47,14 @@ The Objective could tempt an eager builder well past this slice; these are fence
 - **Correcting or deleting a Step Record.** Step Records are append-only; there is no edit, undo, or delete of a recorded outcome in this slice.
 - **Re-pinning or upgrading an Execution.** A running or closed Execution is never moved to a different or newer Runbook Version.
 - **Re-opening a closed Execution.** Once closed, an Execution takes no further Step Records.
+- **Running a Runbook outside an incident.** An Execution always references an incident; practice runs, drills, or rehearsals with no incident are out of scope.
+- **More than one Execution per incident.** An incident reference maps to a single Execution; running several Runbooks for one incident, or restarting a run, is out of scope. (Executions for different incidents are independent and unaffected.)
 - **Deriving Execution close from the external incident.** Closing is a manual action by a responder or commander this slice; closing an Execution automatically when its external incident closes (and the integration that would require) is deferred to a later slice.
 - **Capturing who performed a Step.** With no authentication in any slice, the actor is not recorded; the Step Record's "who" is deferred until accounts exist (binding glossary, amended 2026-06-13).
 - **Writing the postmortem.** The Computed Review is derived; authoring narrative analysis, root-cause, or action items on top of it is out of scope.
 - **Editing the Computed Review.** It is computed from Step Records and cannot be hand-edited.
 - **Assigning Steps to people, reminders, timers, or SLA tracking.** Out of scope.
+- **Multiple people recording to one Execution.** An Execution is driven by a single person this slice, upholding the architecture's single-user NFR (no concurrent-write guarantees); concurrent multi-responder recording is out of scope.
 - **Real-time multi-responder collaboration or live presence.** Out of scope.
 - **Authentication, accounts, or permissions.** Running and recording are open, consistent with the prior slices.
 - **Cross-Execution analytics or dashboards.** Reporting across many runs is out of scope.
@@ -60,7 +64,7 @@ The Objective could tempt an eager builder well past this slice; these are fence
 ## Metrics
 Hypotheses with stated basis; the figures are illustrative, carried from discovery for a ~30-engineer SRE org.
 - **Review preparation time:** producing the account of a response drops from ~45 minutes of manual reconstruction to ≤5 minutes to obtain a Computed Review — basis: the review is derived from records captured during the run rather than rebuilt from memory; treated as a hypothesis to correct, not a commitment.
-- **Capture completeness:** ≥90% of the Steps acted on during an Execution carry a Step Record, versus lossy after-the-fact recall — basis: capturing in the moment beats reconstruction; assumed, not validated.
+- **Capture completeness:** ≥90% of the Steps acted on during an Execution carry a Step Record, versus lossy after-the-fact recall — basis: capturing in the moment beats reconstruction; assumed, not validated. Observational only: the system cannot count Steps acted on but never recorded, so this is gauged from responder feedback, not computed by the product.
 - **Review fidelity:** zero discrepancy between a Computed Review and the Step Records it derives from — basis: the review is mechanical, so this is a property to hold and measure, not a target to approach.
 - **Pin integrity:** zero Executions whose pinned Runbook Version changed after the run started — basis: the unchanging pin is the core promise of this slice; a property to hold, not approach.
 - **Adoption:** at least the ~4 reviewable incidents/month are run as Executions within the first month of use — basis: the illustrative discovery figure; assumed, to be corrected against real use.
@@ -71,6 +75,12 @@ These were open at draft and are now decided; recorded here so the spec inherits
 - **Step order is captured, not enforced.** Responders act in any order the incident demands; the record captures the true order. The plan-time ADR for hotspot H3 formalizes this and records the alternative (enforce order).
 - **"Who" is not captured this slice.** No accounts exist, so the actor would be unverified; the Step Record's "who" is deferred until authentication exists (binding glossary amended 2026-06-13).
 - **Appetite is a couple of evenings**, matching slice 01; cut scope rather than extend.
+
+Settled in the PRD review pass (2026-06-13), closing ambiguities an agent would otherwise invent:
+- **An Execution pins the chosen Runbook's current (most recently published) Version** at start — consistent with slice 01's "current version" default.
+- **The Computed Review is ordered chronologically** by when outcomes were recorded; a pinned-Version Step with no Step Record is shown as **not reached**, distinct from explicitly **skipped**.
+- **A Step may be re-marked**; each mark appends a Step Record, the Review shows the sequence, and the most recent mark is the Step's end state.
+- **One person drives an Execution** this slice (upholds the single-user NFR); **one Execution per incident** (multiplicity fenced in Non-goals).
 
 ## Open questions
 These stay open by design — they are contested design decisions routed to ADRs at /speckit.plan, not PRD-altitude calls.
