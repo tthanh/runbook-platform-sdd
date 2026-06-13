@@ -1,8 +1,8 @@
 number: 2
 title: rich-domain-model
-status: Implement
+status: Released
 created: 2026-06-12
-last-updated: 2026-06-12
+last-updated: 2026-06-13
 adrs: ["0003-rich-domain-model (Accepted)"]
 spec-folder: specs/002-rich-domain-model
-release-tag: null
+release-tag: v0.1.1
