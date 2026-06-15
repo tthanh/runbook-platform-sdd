@@ -83,4 +83,4 @@ The escape-first safety principle does not flip; only the build-vs-buy choice do
 
 ## Status + date
 
-Proposed — 2026-06-15
+Accepted — 2026-06-15 (accepted on explicit author instruction)
