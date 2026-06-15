@@ -1,3 +1,39 @@
+# Release Notes — v0.1.2
+
+**Released**: 2026-06-15
+**Initiative**: none — visual refresh, not a product initiative (no PRD, no spec folder)
+**ADRs**: none
+
+## What ships
+
+No functional change. A hand-written CSS refresh turns the bare-HTML frontend into a styled
+application:
+
+- A design-token system in `frontend/src/index.css` — neutral surface ramp, brand/semantic
+  colors, spacing, radius, and elevation scales — with a matching dark-mode set under
+  `prefers-color-scheme`.
+- A shared sticky app header (brand + link home) added in `frontend/src/App.tsx`; routing logic
+  unchanged (extracted verbatim into `routeToPage`).
+- Styled buttons (primary/secondary/ghost/disabled with focus rings), inputs, cards, the
+  numbered step editor, and the execution run/timeline/coverage lists.
+- Semantic outcome colors wired to the existing `step-done` / `step-skipped` / `step-failed`
+  classes (green / amber / red) — previously referenced in the markup but unstyled.
+
+Markup changes are limited to the new header; no component behavior, API call, route, or DTO
+changed. The dependency-free intent of the slice is preserved — no styling packages added.
+
+## Incidental fix
+
+`frontend/src/api/client.ts` — `ApiError` used a TypeScript constructor parameter-property
+(`public readonly status`), which the project's `erasableSyntaxOnly` setting rejects, breaking
+`npm run build` on `main`. Rewritten as an explicit field assignment. Build now green.
+
+## Verification
+
+`npm run build` (tsc -b + vite build) passes. No backend or test changes.
+
+---
+
 # Release Notes — v0.1.1
 
 **Released**: 2026-06-13

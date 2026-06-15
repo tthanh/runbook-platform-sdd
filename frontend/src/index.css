@@ -1,14 +1,55 @@
-:root {
-  --text: #1f2937;
-  --muted: #6b7280;
-  --bg: #ffffff;
-  --border: #e5e7eb;
-  --accent: #2563eb;
-  --error: #b91c1c;
-  --notice: #15803d;
-  --badge-bg: #eff6ff;
+/* ============================================================================
+   Runbook Platform — design system
+   Hand-written, dependency-free (matches the slice's no-package intent).
+   Tokens first, then base elements, then components, then page-specific bits.
+   ========================================================================== */
 
-  font: 16px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
+:root {
+  /* Neutral surface ramp (light) */
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f1f3f6;
+  --text: #1b2333;
+  --muted: #64748b;
+  --border: #e2e6ec;
+  --border-strong: #cbd2dc;
+
+  /* Brand + semantic */
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-contrast: #ffffff;
+  --accent-soft: #eef2ff;
+
+  --success: #15803d;
+  --success-soft: #dcfce7;
+  --warn: #b45309;
+  --warn-soft: #fef3c7;
+  --error: #b91c1c;
+  --error-soft: #fee2e2;
+  --notice: #15803d;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+
+  /* Radius + elevation */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.10), 0 2px 4px rgba(15, 23, 42, 0.06);
+  --ring: 0 0 0 3px rgba(79, 70, 229, 0.30);
+
+  font: 16px/1.6 system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   color: var(--text);
   background: var(--bg);
   color-scheme: light dark;
@@ -16,108 +57,482 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #e5e7eb;
-    --muted: #9ca3af;
-    --bg: #111318;
-    --border: #2e303a;
-    --accent: #60a5fa;
+    --bg: #0b0e14;
+    --surface: #151a23;
+    --surface-2: #1b212c;
+    --text: #e7ebf1;
+    --muted: #94a3b8;
+    --border: #283040;
+    --border-strong: #394456;
+
+    --accent: #818cf8;
+    --accent-hover: #a5b4fc;
+    --accent-contrast: #0b0e14;
+    --accent-soft: #1e253a;
+
+    --success: #4ade80;
+    --success-soft: #14321f;
+    --warn: #fbbf24;
+    --warn-soft: #3a2c0c;
     --error: #f87171;
+    --error-soft: #3a1414;
     --notice: #4ade80;
-    --badge-bg: #1e293b;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+    --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+    --ring: 0 0 0 3px rgba(129, 140, 248, 0.35);
   }
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+/* ----------------------------------------------------------------------------
+   App shell
+   -------------------------------------------------------------------------- */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.app-header .brand .logo {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.95rem;
+}
+
+.app-header .brand .brand-sub {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.85rem;
 }
 
 main {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 2rem 1rem 4rem;
+  padding: var(--space-6) var(--space-5) var(--space-8);
 }
 
+/* ----------------------------------------------------------------------------
+   Typography
+   -------------------------------------------------------------------------- */
+
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
 }
 
 h2 {
-  font-size: 1.1rem;
-  margin-top: 2rem;
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  margin: var(--space-6) 0 var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+p {
+  margin: var(--space-3) 0;
 }
 
 a {
   color: var(--accent);
+  text-decoration: none;
 }
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Inline "back" link styled as a quiet pill */
+main > p > a[href^="#/"]:first-child:only-child,
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ----------------------------------------------------------------------------
+   Forms
+   -------------------------------------------------------------------------- */
 
 input {
   font: inherit;
   color: inherit;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 0.4rem 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.7rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-button {
+input::placeholder {
+  color: var(--muted);
+}
+
+input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--ring);
+}
+
+label {
+  display: block;
+  margin: var(--space-4) 0;
+  font-weight: 550;
+  font-size: 0.92rem;
+}
+
+label input {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-2);
+  font-weight: 400;
+}
+
+.required {
+  color: var(--error);
+}
+
+/* ----------------------------------------------------------------------------
+   Buttons
+   -------------------------------------------------------------------------- */
+
+button,
+a.primary {
   font: inherit;
-  color: inherit;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 0.4rem 0.8rem;
+  font-weight: 550;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.9rem;
   cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.05s;
 }
 
-button.primary {
+button:hover {
+  background: var(--surface-2);
+  border-color: var(--muted);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+button:focus-visible,
+a.primary:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.primary,
+a.primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: var(--accent-contrast);
+  text-decoration: none;
 }
+
+button.primary:hover,
+a.primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  text-decoration: none;
+}
+
+/* Form row: input + button side by side */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  margin: var(--space-4) 0;
+}
+
+/* StartForm uses stacked labels, so let it flow as a block */
+form:has(label) {
+  display: block;
+}
+
+form > input {
+  flex: 1 1 240px;
+}
+
+/* ----------------------------------------------------------------------------
+   Cards / lists
+   -------------------------------------------------------------------------- */
 
 .runbook-list,
 .version-history {
   list-style: none;
   padding: 0;
+  margin: var(--space-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .runbook-list li,
 .version-history li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.05s;
 }
+
+.runbook-list li:hover,
+.version-history li:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow);
+}
+
+.runbook-list li a {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.runbook-list li a:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* ----------------------------------------------------------------------------
+   Step editor (authoring)
+   -------------------------------------------------------------------------- */
 
 .step-editor {
-  padding-left: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: var(--space-4) 0;
+  counter-reset: step;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
-.step-editor li {
-  margin: 0.4rem 0;
+.step-editor > li {
   display: flex;
-  gap: 0.4rem;
+  gap: var(--space-2);
   align-items: center;
+}
+
+.step-editor > li:not(.add-row)::before {
+  counter-increment: step;
+  content: counter(step);
+  flex: 0 0 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: var(--radius-pill);
 }
 
 .step-editor input {
   flex: 1;
 }
 
+.step-editor button {
+  padding: 0.4rem 0.6rem;
+  line-height: 1;
+}
+
 .step-editor .add-row {
-  list-style: none;
-  margin-left: -1.5rem;
+  margin-top: var(--space-1);
+}
+
+.step-editor .add-row button {
+  width: 100%;
+  justify-content: center;
+  background: transparent;
+  border-style: dashed;
+  color: var(--muted);
+}
+
+.step-editor .add-row button:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* ----------------------------------------------------------------------------
+   Version view (read-only)
+   -------------------------------------------------------------------------- */
+
+.version-steps {
+  margin: var(--space-4) 0;
+  padding-left: 1.4rem;
 }
 
 .version-steps li {
-  margin: 0.5rem 0;
+  margin: var(--space-2) 0;
+  padding-left: var(--space-1);
 }
 
+/* ----------------------------------------------------------------------------
+   Execution: run view, timeline, coverage
+   -------------------------------------------------------------------------- */
+
+.step-list,
+.timeline,
+.coverage {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.step-list > li,
+.timeline > li,
+.coverage > li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.step-pos {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.step-text {
+  flex: 1 1 12rem;
+}
+
+.step-actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  align-items: center;
+}
+
+.step-actions input {
+  flex: 1 1 12rem;
+}
+
+.note-toggle {
+  color: var(--muted);
+}
+
+.timeline .time,
+.time {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.close-btn {
+  margin-top: var(--space-4);
+}
+
+/* Semantic outcome accents — applied to li.step-done / .step-skipped / .step-failed */
+.step-done {
+  border-left-color: var(--success);
+}
+
+.step-skipped {
+  border-left-color: var(--warn);
+}
+
+.step-failed {
+  border-left-color: var(--error);
+}
+
+/* ----------------------------------------------------------------------------
+   Badges + status text
+   -------------------------------------------------------------------------- */
+
 .badge {
-  background: var(--badge-bg);
+  display: inline-flex;
+  align-items: center;
+  background: var(--accent-soft);
   color: var(--accent);
-  border: 1px solid var(--accent);
-  border-radius: 999px;
-  font-size: 0.8rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
   padding: 0.1rem 0.6rem;
+  white-space: nowrap;
+}
+
+/* Outcome-colored badges inherit from their parent li's semantic class */
+.step-done .badge {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.step-skipped .badge {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.step-failed .badge {
+  background: var(--error-soft);
+  color: var(--error);
 }
 
 .muted {
@@ -127,8 +542,16 @@ button.primary {
 
 .error {
   color: var(--error);
+  background: var(--error-soft);
+  border: 1px solid color-mix(in srgb, var(--error) 30%, transparent);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
 }
 
 .notice {
   color: var(--notice);
+  background: var(--success-soft);
+  border: 1px solid color-mix(in srgb, var(--notice) 30%, transparent);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-4);
 }

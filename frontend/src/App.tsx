@@ -21,9 +21,19 @@ function useHashRoute(): string {
   return hash.replace(/^#/, '') || '/'
 }
 
-function App() {
-  const route = useHashRoute()
+function AppHeader() {
+  return (
+    <header className="app-header">
+      <a className="brand" href="#/">
+        <span className="logo" aria-hidden="true">▷</span>
+        Runbook Platform
+        <span className="brand-sub">incident execution</span>
+      </a>
+    </header>
+  )
+}
 
+function routeToPage(route: string) {
   const reviewMatch = route.match(/^\/executions\/([^/]+)\/review$/)
   if (reviewMatch) {
     return <ExecutionReviewPage executionId={reviewMatch[1]} />
@@ -51,6 +61,16 @@ function App() {
   }
 
   return <RunbookList />
+}
+
+function App() {
+  const route = useHashRoute()
+  return (
+    <>
+      <AppHeader />
+      {routeToPage(route)}
+    </>
+  )
 }
 
 export default App
