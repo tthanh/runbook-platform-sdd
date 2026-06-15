@@ -62,4 +62,4 @@ glossary in the same ratified step. Until then the set stays closed at two.
 
 ## Status + date
 
-Proposed — 2026-06-15
+Accepted — 2026-06-15 (accepted on explicit author instruction)
