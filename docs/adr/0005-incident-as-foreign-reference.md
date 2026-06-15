@@ -56,6 +56,11 @@ one-Execution-per-incident rule (FR-015) keys on `IncidentId`.
 - **The title can drift** from the external tool's title over time, since it is
   a manual snapshot. Accepted — it is a label for the review, not a source of
   truth.
+- **A shared id collides.** Because `IncidentId` is free-text and uniquely
+  indexed (data-model.md), two genuinely different incidents accidentally given
+  the same id will collide — the unique constraint wrongly refuses the second
+  incident's legitimate Execution. Accepted: unvalidated input is the cost of
+  holding no integration; reliable deduplication is the flip trigger.
 
 ## Consequences
 
@@ -79,4 +84,4 @@ Incident stops being a stored value and becomes a synced reference.
 
 ## Status + date
 
-Proposed — 2026-06-13
+Accepted — 2026-06-13 (accepted on explicit author instruction)

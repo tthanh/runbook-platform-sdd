@@ -1,8 +1,8 @@
 number: 3
 title: runbook-execution
-status: Plan
+status: Tasks
 created: 2026-06-13
 last-updated: 2026-06-13
-adrs: ["0004-version-pin-holds-mid-incident-publish (Proposed)", "0005-incident-as-foreign-reference (Proposed)"]
+adrs: ["0004-version-pin-holds-mid-incident-publish (Accepted)", "0005-incident-as-foreign-reference (Accepted)"]
 spec-folder: specs/003-runbook-execution
 release-tag: null
