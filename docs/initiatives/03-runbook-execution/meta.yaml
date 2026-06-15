@@ -1,6 +1,6 @@
 number: 3
 title: runbook-execution
-status: Tasks
+status: Implement
 created: 2026-06-13
 last-updated: 2026-06-13
 adrs: ["0004-version-pin-holds-mid-incident-publish (Accepted)", "0005-incident-as-foreign-reference (Accepted)"]

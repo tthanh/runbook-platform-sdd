@@ -9,6 +9,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Step> Steps => Set<Step>();
     public DbSet<RunbookVersion> RunbookVersions => Set<RunbookVersion>();
     public DbSet<RunbookVersionStep> RunbookVersionSteps => Set<RunbookVersionStep>();
+    public DbSet<Execution> Executions => Set<Execution>();
+    public DbSet<StepRecord> StepRecords => Set<StepRecord>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -35,6 +37,23 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<RunbookVersionStep>(e =>
         {
             e.Property(s => s.Text).IsRequired();
+        });
+
+        modelBuilder.Entity<Execution>(e =>
+        {
+            e.Property(x => x.IncidentId).IsRequired();
+            // FR-015: one Execution per incident.
+            e.HasIndex(x => x.IncidentId).IsUnique();
+            e.Property(x => x.Status).HasConversion<string>();
+            // Backing-field navigation for the append-only records list (_stepRecords).
+            e.HasMany(x => x.StepRecords)
+             .WithOne()
+             .HasForeignKey(r => r.ExecutionId);
+        });
+
+        modelBuilder.Entity<StepRecord>(e =>
+        {
+            e.Property(r => r.Outcome).HasConversion<string>();
         });
     }
 }
