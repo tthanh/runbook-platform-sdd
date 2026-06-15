@@ -51,7 +51,15 @@ One meaning per word in specs, plans, tasks, code, events, commits:
 - **Runbook Version** — an immutable snapshot of a runbook's steps, frozen and
   identified at publish; editing a published runbook produces a new version, and
   a published version's content never changes.
-- **Step** — one ordered instruction within a runbook version.
+- **Step** — one ordered instruction within a runbook version; carries a required
+  title and optional detail — instructions (lightweight markdown), the command to
+  run, and the expected result — together with a Step Type. Detail may be empty,
+  so a title-only Step is valid; a published version freezes a Step's title,
+  detail, and type immutably.
+- **Step Type** — the classification of a Step by the kind of work it represents;
+  one of Action (do something) or Check (verify a condition or observe a result).
+  Descriptive only — it does not change a Step's required fields or how it is
+  executed. Decision and Gate types are deferred with branching.
 - **Execution** — a single run of a runbook against one incident; it pins exactly
   one runbook version when it starts and never re-pins.
 - **Version Pin** — the fixed binding of an execution to the one runbook version
@@ -130,6 +138,18 @@ screen or per-term history is needed.
   them). Glossary now holds 8 terms — still under a screen, so the flip to
   docs/glossary.md does not trip. Reason: the deferred half of 01 is being
   delivered; the language enters exactly when the slice requires it.
+- 2026-06-15: Step redefined + Step Type added (9 terms) — initiative 04 workshop.
+  Step grows from "one ordered instruction" to carry a required title plus optional
+  detail (instructions as lightweight markdown, command, expected result) and a
+  Step Type; the freeze at publish now covers title, detail, and type. Step Type
+  is a new term with a minimal set (Action, Check), descriptive only — Decision
+  and Gate types are deferred with the branching initiative. The slice that needs
+  this language (04-rich-steps) is being built, so the terms enter per the rule
+  (ratified + a slice needs them). Glossary now holds 9 terms — still under a
+  screen, so the flip to docs/glossary.md does not trip. Reason: a bare title is
+  below the floor every comparable runbook tool sets; the language enters exactly
+  when the slice requires richer Steps, and stays minimal (no control-flow types)
+  to keep complexity earned.
 - 2026-06-15: Initiative 03 reached Implement — two engineering rules validated
   in practice and now treated as standing patterns for future slices:
   (1) C-002 migration path: the initial EF Core migration reproducing the
