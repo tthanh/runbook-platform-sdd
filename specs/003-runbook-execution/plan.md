@@ -56,7 +56,7 @@ handful of Steps and records. No performance targets beyond slice-01 norms.
 | Tests map to requirement ids | PLAN | `/speckit.tasks` will map integration tests to FR ids (FR-001…FR-017) |
 | Conflict register checked | PASS | Touches C-001, C-002, C-003, C-004 — see below |
 | Contested decisions promoted to ADRs | PASS | ADR-0004 (H2) and ADR-0005 (H5) drafted **Proposed**; H4 resolved in research (no contested decision — no dual-write); C-002 decided by the existing register entry |
-| Tasks blocked while ADRs Proposed | **BLOCKED** | ADR-0004 and ADR-0005 are Proposed. Per the constitution, implementation is blocked until each is **Accepted** by a separate human commit on main. `/speckit.tasks` may generate the list; `/speckit.implement` must wait. |
+| Tasks blocked while ADRs Proposed | CLEAR | ADR-0004 and ADR-0005 were **Accepted** 2026-06-13 (separate human-instructed commit). Implementation is unblocked. |
 
 ### Conflict register check (docs/architecture.md)
 
@@ -148,6 +148,6 @@ optional scope.
 
 ## Human gate before implementation
 
-ADR-0004 and ADR-0005 are **Proposed**. They must each be **Accepted** by a
-separate human-authored status commit on `main` before `/speckit.implement` runs.
-`/speckit.tasks` may proceed to generate the task list in the meantime.
+CLEARED. ADR-0004 and ADR-0005 were **Accepted** on 2026-06-13 (separate
+human-instructed commit). The gate is open: `/speckit.tasks` then
+`/speckit.implement` may proceed.

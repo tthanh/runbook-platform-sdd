@@ -76,4 +76,4 @@ itself does not flip; only the silence does.
 
 ## Status + date
 
-Proposed — 2026-06-13
+Accepted — 2026-06-13 (accepted on explicit author instruction)

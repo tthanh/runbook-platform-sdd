@@ -84,4 +84,4 @@ Incident stops being a stored value and becomes a synced reference.
 
 ## Status + date
 
-Proposed — 2026-06-13
+Accepted — 2026-06-13 (accepted on explicit author instruction)
