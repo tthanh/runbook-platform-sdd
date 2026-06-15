@@ -1,8 +1,8 @@
 number: 4
 title: rich-steps
-status: PRD
+status: Specify
 created: 2026-06-15
 last-updated: 2026-06-15
 adrs: []
-spec-folder: null
+spec-folder: specs/004-rich-steps
 release-tag: null
