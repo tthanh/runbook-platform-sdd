@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api, ApiError, type ExecutionView, type ComputedReview } from '../api/client'
+import { StepDetail } from '../components/StepDetail'
 
 // US1 run view + US2 close/review: hash-routed, no router package (C-003 / R7).
 // Routes:
@@ -47,7 +48,15 @@ function RunView({ execution, onRecordStep, onClose, error }: RunViewProps) {
             <li key={step.position} className={last ? `step-${last.toLowerCase()}` : ''}>
               <span className="step-pos">{step.position}.</span>
               <span className="step-text">{step.text}</span>
+              <span className={`step-type-badge type-${step.type.toLowerCase()}`}>{step.type}</span>
               {last && <span className="badge">{last}</span>}
+
+              {/* FR-009: the detail is in front of the responder before they record. */}
+              <StepDetail
+                instructions={step.instructions}
+                command={step.command}
+                expectedResult={step.expectedResult}
+              />
 
               {execution.status === 'Open' && (
                 <span className="step-actions">
@@ -115,8 +124,15 @@ function ReviewView({ review, executionId }: ReviewViewProps) {
             <li key={i} className={`step-${entry.outcome.toLowerCase()}`}>
               <span className="badge">{entry.outcome}</span>{' '}
               Step {entry.stepPosition}: {entry.stepText}
+              {entry.type && <span className={`step-type-badge type-${entry.type.toLowerCase()}`}>{entry.type}</span>}
               {entry.note && <span className="muted"> — {entry.note}</span>}
               <span className="muted time"> {new Date(entry.recordedAt).toLocaleTimeString()}</span>
+              {/* FR-011: the pinned Step's detail alongside its outcome. */}
+              <StepDetail
+                instructions={entry.instructions}
+                command={entry.command}
+                expectedResult={entry.expectedResult}
+              />
             </li>
           ))}
         </ol>

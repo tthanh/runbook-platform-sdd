@@ -6,7 +6,13 @@ namespace RunbookPlatform.Api.Endpoints;
 
 public record CreateRunbookRequest(string Name);
 public record SaveStepsRequest(List<SaveStepItem> Steps);
-public record SaveStepItem(string Text);
+// Text is the required title; the rest is optional detail + Step Type (004).
+public record SaveStepItem(
+    string Text,
+    string? Instructions = null,
+    string? Command = null,
+    string? ExpectedResult = null,
+    string? Type = null);
 
 public static class RunbookEndpoints
 {
@@ -68,7 +74,7 @@ public static class RunbookEndpoints
             var runbook = await LoadRunbook(db, id);
             if (runbook is null) return NotFound();
 
-            runbook.ReplaceSteps(request.Steps.Select(s => s.Text));
+            runbook.ReplaceSteps(request.Steps.Select(ToDraft));
             // EF treats navigation-discovered entities with client-set Guid
             // keys as existing rows; mark the replacements as inserts.
             db.Steps.AddRange(runbook.Steps);
@@ -76,7 +82,7 @@ public static class RunbookEndpoints
 
             return Results.Ok(new
             {
-                steps = runbook.Steps.Select(s => new { s.Position, s.Text }),
+                steps = runbook.Steps.OrderBy(s => s.Position).Select(ToStepDto),
             });
         });
 
@@ -97,9 +103,32 @@ public static class RunbookEndpoints
     {
         id = runbook.Id,
         name = runbook.Name,
-        steps = runbook.Steps.OrderBy(s => s.Position).Select(s => new { s.Position, s.Text }),
+        steps = runbook.Steps.OrderBy(s => s.Position).Select(ToStepDto),
         currentVersionNumber = runbook.CurrentVersionNumber,
         versions = runbook.Versions.OrderBy(v => v.Number)
             .Select(v => new { v.Number, v.PublishedAt }),
     };
+
+    // Shared working-Step projection: title + optional detail + Step Type (004).
+    internal static object ToStepDto(Step s) => new
+    {
+        s.Position,
+        s.Text,
+        instructions = s.Instructions,
+        command = s.Command,
+        expectedResult = s.ExpectedResult,
+        type = s.Type.ToString(),
+    };
+
+    private static StepDraft ToDraft(SaveStepItem s) =>
+        new(s.Text, s.Instructions, s.Command, s.ExpectedResult, ParseType(s.Type));
+
+    // FR-002: Step Type defaults to Action; anything outside {Action, Check} is rejected.
+    internal static StepType ParseType(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return StepType.Action;
+        if (Enum.TryParse<StepType>(raw, ignoreCase: true, out var t) && Enum.IsDefined(t))
+            return t;
+        throw new DomainException($"Invalid step type '{raw}'. Must be Action or Check.");
+    }
 }

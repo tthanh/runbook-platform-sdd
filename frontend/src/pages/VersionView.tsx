@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { api, type RunbookVersion } from '../api/client'
+import { StepDetail } from '../components/StepDetail'
 
 // US3-2 / FR-007: a published Runbook Version, exactly as published. Read-only.
 export function VersionView({ runbookId, number }: { runbookId: string; number: number }) {
@@ -28,7 +29,17 @@ export function VersionView({ runbookId, number }: { runbookId: string; number: 
 
       <ol className="version-steps">
         {version.steps.map((s) => (
-          <li key={s.position}>{s.text}</li>
+          <li key={s.position}>
+            <div className="step-head">
+              <span className="step-text">{s.text}</span>
+              <span className={`step-type-badge type-${s.type.toLowerCase()}`}>{s.type}</span>
+            </div>
+            <StepDetail
+              instructions={s.instructions}
+              command={s.command}
+              expectedResult={s.expectedResult}
+            />
+          </li>
         ))}
       </ol>
     </main>
