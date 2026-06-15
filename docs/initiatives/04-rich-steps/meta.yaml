@@ -3,6 +3,6 @@ title: rich-steps
 status: Plan
 created: 2026-06-15
 last-updated: 2026-06-15
-adrs: ["0006-markdown-rendering-and-sanitization (Proposed)", "0007-step-type-taxonomy (Proposed)"]
+adrs: ["0006-markdown-rendering-and-sanitization (Accepted)", "0007-step-type-taxonomy (Accepted)"]
 spec-folder: specs/004-rich-steps
 release-tag: null
