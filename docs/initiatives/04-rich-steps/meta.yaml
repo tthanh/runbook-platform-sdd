@@ -1,8 +1,8 @@
 number: 4
 title: rich-steps
-status: Workshop
+status: Plan
 created: 2026-06-15
 last-updated: 2026-06-15
-adrs: []
-spec-folder: null
+adrs: ["0006-markdown-rendering-and-sanitization (Proposed)", "0007-step-type-taxonomy (Proposed)"]
+spec-folder: specs/004-rich-steps
 release-tag: null
