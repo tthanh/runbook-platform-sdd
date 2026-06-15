@@ -10,7 +10,7 @@ Skip recorded → PRD → Specify → Plan → Tasks → Implement → Released
 |---|------------|-----------|--------|
 | 1 | 01-versioned-runbook-execution | Author versioned runbooks; an execution pins a version and records every step, so the post-incident review is computed, not reconstructed | Released |
 | 2 | 02-rich-domain-model | Structural: enforce domain invariants inside aggregates (ADR-0003) | Released |
-| 3 | 03-runbook-execution | Run a published version against an incident: pin the version, record every step as it happens, compute the review from the records | Plan |
+| 3 | 03-runbook-execution | Run a published version against an incident: pin the version, record every step as it happens, compute the review from the records | Tasks |
 
 ## Artifact ledger
 
