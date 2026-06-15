@@ -130,3 +130,15 @@ screen or per-term history is needed.
   them). Glossary now holds 8 terms — still under a screen, so the flip to
   docs/glossary.md does not trip. Reason: the deferred half of 01 is being
   delivered; the language enters exactly when the slice requires it.
+- 2026-06-15: Initiative 03 reached Implement — two engineering rules validated
+  in practice and now treated as standing patterns for future slices:
+  (1) C-002 migration path: the initial EF Core migration reproducing the
+  existing schema byte-for-byte (so existing databases and tests are unaffected)
+  followed by a second migration for the new tables is the correct procedure for
+  any schema-changing slice. EnsureCreated must never be mixed with migrations.
+  (2) SQLite DateTimeOffset ordering: ORDER BY DateTimeOffset pushed to SQLite
+  is unreliable (confirmed in slice-01 retro, mitigated successfully in slice-03
+  via in-memory ordering + a per-Execution Sequence tiebreaker). Any slice that
+  orders by DateTimeOffset MUST do so in memory after loading. Both patterns
+  belong in docs/architecture.md's conflict register as standing constraints;
+  this note records that they are empirically confirmed, not just theorised.

@@ -69,6 +69,17 @@ export function RunbookDetail({ runbookId }: { runbookId: string }) {
       {error && <p className="error">{error}</p>}
       {notice && <p className="notice">{notice}</p>}
 
+      {runbook.currentVersionNumber !== null && (
+        <p>
+          <a
+            href={`#/executions/start?runbookId=${runbook.id}`}
+            className="primary"
+          >
+            Run against Incident →
+          </a>
+        </p>
+      )}
+
       <h2>Published versions</h2>
       <VersionHistory
         runbookId={runbook.id}

@@ -12,8 +12,18 @@ This repository is two things at once:
   [GitHub Spec Kit](https://github.com/github/spec-kit). The commit history,
   specs, and decision records are the deliverable as much as the code.
 
-**Status:** the first feature, `01-versioned-runbook-execution`, is in flight —
-see [`docs/prd-register.md`](docs/prd-register.md) for the live status board.
+**Status:** three initiatives tracked — see [`docs/prd-register.md`](docs/prd-register.md)
+for the live board.
+
+| # | Initiative | Tag | Status |
+|---|------------|-----|--------|
+| 01 | versioned-runbook-authoring | v0.1.0 | Released |
+| 02 | rich-domain-model | v0.1.1 | Released |
+| 03 | runbook-execution | — | Implement |
+
+What's built: author versioned runbooks, run them against incidents, pin the
+version at start, record every step, compute the review on close. The
+execution slice (03) is implemented and awaiting its release tag.
 
 ## How a feature gets built
 
