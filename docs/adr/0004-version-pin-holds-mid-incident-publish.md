@@ -5,9 +5,10 @@
 Workshop hotspot **H2** (initiative 01, carried into 03). An Execution pins the
 chosen Runbook's current published Runbook Version at start (FR-001) and the
 glossary says it "never re-pins." But a Runbook keeps evolving: an author may
-publish a newer Runbook Version *while an Execution is in flight*. We must fix
-two things — the rule (does the pin hold?) and the responder-facing experience
-(what does someone running the pinned Version see when a newer one exists?).
+publish a newer Runbook Version *while an Execution is in flight*. The binding
+glossary already fixes the rule — an Execution "never re-pins" — so this ADR
+records *why* that rule holds and decides the genuinely open part: what a
+responder running the pinned Version sees when a newer Version exists.
 
 This matters because the Computed Review's truth depends on it: a review can only
 say "this is the procedure we followed" if the procedure could not shift under
@@ -59,6 +60,12 @@ notification** that a newer Version exists.
   Version by its ADR-0001 identity; it does not alter the uniqueness rule.
 - No UI is built for "newer Version exists"; the run view shows the pinned
   Version only.
+- **For a given incident, the pinned Version is final.** Combined with one
+  Execution per incident and refuse-if-closed (FR-015, clarification
+  2026-06-13), a newer Version cannot be adopted for that incident even if a
+  responder discovers mid-run that a fix has shipped: the pinned steps are the
+  only mid-incident path, and the newer Version applies to future incidents.
+  The flip condition watches for this becoming a real pain.
 
 ## Flip condition
 
