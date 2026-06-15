@@ -26,3 +26,11 @@ For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
 at specs/003-runbook-execution/plan.md
 <!-- SPECKIT END -->
+
+Shell notes (required before running dotnet or dotnet-ef):
+  export DOTNET_ROOT="$HOME/.dotnet"
+  export PATH="$HOME/.dotnet/tools:$HOME/.dotnet:$PATH"
+dotnet-ef is installed globally at $HOME/.dotnet/tools/dotnet-ef.
+Run the backend: dotnet run --project backend/src/RunbookPlatform.Api --launch-profile http
+Run all tests:   dotnet test backend/tests/RunbookPlatform.Api.Tests
+Run the frontend: cd frontend && npm run dev   (proxies /api → localhost:5000)
