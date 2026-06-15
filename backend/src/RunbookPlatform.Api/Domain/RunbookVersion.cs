@@ -30,7 +30,8 @@ public class RunbookVersion
         };
         version._steps.AddRange(runbook.Steps
             .OrderBy(s => s.Position)
-            .Select(s => new RunbookVersionStep(Guid.NewGuid(), version.Id, s.Position, s.Text)));
+            .Select(s => new RunbookVersionStep(Guid.NewGuid(), version.Id, s.Position, s.Text,
+                s.Instructions, s.Command, s.ExpectedResult, s.Type)));
         return version;
     }
 }

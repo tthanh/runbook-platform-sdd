@@ -164,7 +164,7 @@ public static class ExecutionEndpoints
             status = execution.Status.ToString(),
             runbookName,
             pinnedVersionNumber = pinnedVersion?.Number,
-            steps = pinnedVersion?.Steps.Select(s => new { s.Position, s.Text }) ?? [],
+            steps = pinnedVersion?.Steps.OrderBy(s => s.Position).Select(VersionEndpoints.ToVersionStepDto) ?? [],
             records = execution.StepRecords
                 .OrderBy(r => r.RecordedAt).ThenBy(r => r.Sequence)
                 .Select(r => new
@@ -188,6 +188,11 @@ public static class ExecutionEndpoints
                 {
                     stepPosition = r.StepPosition,
                     stepText = step?.Text ?? "",
+                    // 004 FR-011: the pinned Step's detail alongside the outcome.
+                    instructions = step?.Instructions,
+                    command = step?.Command,
+                    expectedResult = step?.ExpectedResult,
+                    type = step?.Type.ToString(),
                     outcome = r.Outcome.ToString(),
                     note = r.Note,
                     recordedAt = r.RecordedAt,

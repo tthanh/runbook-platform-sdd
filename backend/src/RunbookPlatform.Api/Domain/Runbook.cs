@@ -35,18 +35,24 @@ public class Runbook
         };
     }
 
-    // FR-002 (research R5): full ordered replacement of the working Steps.
+    // Full ordered replacement of the working Steps. Title (Text) is required;
+    // detail is optional and empty values normalize to null (004 FR-001/003).
     // Never touches published Runbook Versions (FR-006).
-    public void ReplaceSteps(IEnumerable<string> texts)
+    public void ReplaceSteps(IEnumerable<StepDraft> drafts)
     {
-        var list = texts.ToList();
-        if (list.Any(string.IsNullOrWhiteSpace))
+        var list = drafts.ToList();
+        if (list.Any(d => string.IsNullOrWhiteSpace(d.Text)))
             throw new DomainException("A Step needs content.");
 
         _steps.Clear();
-        _steps.AddRange(list.Select((text, i) =>
-            new Step(Guid.NewGuid(), Id, i + 1, text.Trim())));
+        _steps.AddRange(list.Select((d, i) =>
+            new Step(Guid.NewGuid(), Id, i + 1, d.Text.Trim(),
+                Normalize(d.Instructions), Normalize(d.Command), Normalize(d.ExpectedResult), d.Type)));
     }
+
+    // Empty/whitespace optional detail is stored as null, not "".
+    private static string? Normalize(string? value) =>
+        string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 
     // FR-003 publish gate; FR-004 freeze; FR-005 sequential number (ADR-0001).
     public RunbookVersion Publish()

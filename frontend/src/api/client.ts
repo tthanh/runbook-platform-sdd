@@ -6,9 +6,24 @@ export interface RunbookListItem {
   currentVersionNumber: number | null
 }
 
+export type StepType = 'Action' | 'Check'
+
 export interface StepItem {
   position: number
   text: string
+  instructions: string | null
+  command: string | null
+  expectedResult: string | null
+  type: StepType
+}
+
+// Authoring payload for one Step (no position — order is the array order).
+export interface StepInput {
+  text: string
+  instructions: string | null
+  command: string | null
+  expectedResult: string | null
+  type: StepType
 }
 
 export interface VersionSummary {
@@ -53,6 +68,10 @@ export interface ExecutionView {
 export interface ReviewTimeline {
   stepPosition: number
   stepText: string
+  instructions: string | null
+  command: string | null
+  expectedResult: string | null
+  type: StepType | null
   outcome: string
   note: string | null
   recordedAt: string
@@ -104,10 +123,10 @@ export const api = {
 
   getRunbook: (id: string) => request<RunbookDetail>(`/api/runbooks/${id}`),
 
-  saveSteps: (id: string, texts: string[]) =>
+  saveSteps: (id: string, steps: StepInput[]) =>
     request<{ steps: StepItem[] }>(`/api/runbooks/${id}/steps`, {
       method: 'PUT',
-      body: JSON.stringify({ steps: texts.map((text) => ({ text })) }),
+      body: JSON.stringify({ steps }),
     }),
 
   publish: (id: string) =>

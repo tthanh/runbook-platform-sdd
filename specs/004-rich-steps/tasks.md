@@ -19,7 +19,7 @@ Web app: `backend/src/RunbookPlatform.Api/`, `backend/tests/RunbookPlatform.Api.
 
 ## Phase 1: Setup
 
-- [ ] T001 [P] Add a dev-only test runner to the frontend: add `vitest` to `devDependencies`, a `"test": "vitest run"` script, and a minimal config in `frontend/package.json` (+ `frontend/vitest.config.ts` if needed), so the markdown renderer's safety invariants can be unit-tested (ADR-0006). No runtime dependency is added (C-003). Backend needs no new package — migration tooling is already present from slice 03.
+- [X] T001 [P] Add a dev-only test runner to the frontend: add `vitest` to `devDependencies`, a `"test": "vitest run"` script, and a minimal config in `frontend/package.json` (+ `frontend/vitest.config.ts` if needed), so the markdown renderer's safety invariants can be unit-tested (ADR-0006). No runtime dependency is added (C-003). Backend needs no new package — migration tooling is already present from slice 03.
 
 ---
 
@@ -28,23 +28,23 @@ Web app: `backend/src/RunbookPlatform.Api/`, `backend/tests/RunbookPlatform.Api.
 **⚠️ CRITICAL**: every user story reads or writes the enriched Step; no story work begins until this phase is complete and the regression checkpoint passes.
 
 ### Domain (invariants inside the aggregate — ADR-0003 / C-004)
-- [ ] T002 [P] Add `StepType` enum (`Action`, `Check`) in `backend/src/RunbookPlatform.Api/Domain/StepType.cs` (ADR-0007).
-- [ ] T003 Enrich `Step` in `backend/src/RunbookPlatform.Api/Domain/Step.cs`: add `Instructions`, `Command`, `ExpectedResult` (nullable strings) and `StepType` (default `Action`); keep `Text` as the required title (R1); construct only via `ReplaceSteps`.
-- [ ] T004 Enrich `RunbookVersionStep` in `backend/src/RunbookPlatform.Api/Domain/RunbookVersionStep.cs`: same four fields, frozen; construct only via `RunbookVersion.Freeze`.
-- [ ] T005 Update `Runbook.ReplaceSteps` (and the `RunbookVersion.Freeze` copy) in `backend/src/RunbookPlatform.Api/Domain/Runbook.cs` + `RunbookVersion.cs`: accept structured step inputs (title + optional instructions/command/expectedResult + type), validate title non-empty (FR-003) and `StepType ∈ {Action, Check}` (FR-002), and copy all four new fields into each frozen `RunbookVersionStep` at publish (FR-007). Depends on T002/T003/T004.
+- [X] T002 [P] Add `StepType` enum (`Action`, `Check`) in `backend/src/RunbookPlatform.Api/Domain/StepType.cs` (ADR-0007).
+- [X] T003 Enrich `Step` in `backend/src/RunbookPlatform.Api/Domain/Step.cs`: add `Instructions`, `Command`, `ExpectedResult` (nullable strings) and `StepType` (default `Action`); keep `Text` as the required title (R1); construct only via `ReplaceSteps`.
+- [X] T004 Enrich `RunbookVersionStep` in `backend/src/RunbookPlatform.Api/Domain/RunbookVersionStep.cs`: same four fields, frozen; construct only via `RunbookVersion.Freeze`.
+- [X] T005 Update `Runbook.ReplaceSteps` (and the `RunbookVersion.Freeze` copy) in `backend/src/RunbookPlatform.Api/Domain/Runbook.cs` + `RunbookVersion.cs`: accept structured step inputs (title + optional instructions/command/expectedResult + type), validate title non-empty (FR-003) and `StepType ∈ {Action, Check}` (FR-002), and copy all four new fields into each frozen `RunbookVersionStep` at publish (FR-007). Depends on T002/T003/T004.
 
 ### Data
-- [ ] T006 Map the new columns in `backend/src/RunbookPlatform.Api/Data/AppDbContext.cs`: `StepType` enum↔string conversion (default `Action`) and the three nullable text columns, for both `Step` and `RunbookVersionStep`.
-- [ ] T007 Add one additive EF Core migration in `backend/src/RunbookPlatform.Api/Data/Migrations/` adding `Instructions`/`Command`/`ExpectedResult` (TEXT NULL) + `StepType` (TEXT NOT NULL DEFAULT 'Action') to `Steps` and `RunbookVersionSteps` (C-002 / R7). No table added/dropped. Depends on T005/T006.
-- [ ] T008 Regression checkpoint: run `dotnet test`; the slice-01/03 suites pass **unmodified** against the migrated schema (`git diff --stat backend/tests/` empty). Blocks all story work.
+- [X] T006 Map the new columns in `backend/src/RunbookPlatform.Api/Data/AppDbContext.cs`: `StepType` enum↔string conversion (default `Action`) and the three nullable text columns, for both `Step` and `RunbookVersionStep`.
+- [X] T007 Add one additive EF Core migration in `backend/src/RunbookPlatform.Api/Data/Migrations/` adding `Instructions`/`Command`/`ExpectedResult` (TEXT NULL) + `StepType` (TEXT NOT NULL DEFAULT 'Action') to `Steps` and `RunbookVersionSteps` (C-002 / R7). No table added/dropped. Depends on T005/T006.
+- [X] T008 Regression checkpoint: run `dotnet test`; the slice-01/03 suites pass **unmodified** against the migrated schema (`git diff --stat backend/tests/` empty). Blocks all story work.
 
 ### Shared frontend
-- [ ] T009 [P] Add the hand-rolled markdown renderer `frontend/src/lib/markdown.ts` (ADR-0006): escape all HTML first, then apply the whitelist (bold, italic, inline code, fenced code block, links with http/https/mailto only, ordered/unordered lists, paragraphs/line breaks); return a safe HTML string. No images, tables, or raw HTML.
-- [ ] T010 [P] Unit tests `frontend/src/lib/markdown.test.ts` for the safety invariants (ADR-0006): raw HTML is escaped, `<script>` is neutralised, `javascript:` links are blocked, and bold/list/link render correctly. Depends on T001/T009.
-- [ ] T011 Extend the typed client `frontend/src/api/client.ts`: `StepItem` gains `instructions`/`command`/`expectedResult` (nullable) and `type` (`'Action' | 'Check'`); `saveSteps` accepts structured steps; `ReviewTimeline` gains the same detail fields (R9, contracts/http-api.md).
+- [X] T009 [P] Add the hand-rolled markdown renderer `frontend/src/lib/markdown.ts` (ADR-0006): escape all HTML first, then apply the whitelist (bold, italic, inline code, fenced code block, links with http/https/mailto only, ordered/unordered lists, paragraphs/line breaks); return a safe HTML string. No images, tables, or raw HTML.
+- [X] T010 [P] Unit tests `frontend/src/lib/markdown.test.ts` for the safety invariants (ADR-0006): raw HTML is escaped, `<script>` is neutralised, `javascript:` links are blocked, and bold/list/link render correctly. Depends on T001/T009.
+- [X] T011 Extend the typed client `frontend/src/api/client.ts`: `StepItem` gains `instructions`/`command`/`expectedResult` (nullable) and `type` (`'Action' | 'Check'`); `saveSteps` accepts structured steps; `ReviewTimeline` gains the same detail fields (R9, contracts/http-api.md).
 
 ### Foundational domain tests
-- [ ] T012 [P] Backend tests `backend/tests/RunbookPlatform.Api.Tests/RichStepFreezeTests.cs`: a title-only step is valid (FR-003); a non-`{Action,Check}` type is rejected (FR-002); publish freezes all detail + type; editing the working Runbook and re-publishing leaves an earlier Version's detail unchanged (FR-007/008). Depends on T005/T007.
+- [X] T012 [P] Backend tests `backend/tests/RunbookPlatform.Api.Tests/RichStepFreezeTests.cs`: a title-only step is valid (FR-003); a non-`{Action,Check}` type is rejected (FR-002); publish freezes all detail + type; editing the working Runbook and re-publishing leaves an earlier Version's detail unchanged (FR-007/008). Depends on T005/T007.
 
 **Checkpoint**: enriched domain + schema persist, existing tests green, renderer + client ready. User stories can begin.
 
@@ -57,16 +57,16 @@ Web app: `backend/src/RunbookPlatform.Api/`, `backend/tests/RunbookPlatform.Api.
 **Independent Test**: Author a Step with detail + type, publish, reopen the Version (detail present, markdown rendered); edit + re-publish and confirm the earlier Version is unchanged; a title-only Step still works.
 
 ### Endpoints (thin: load → method → save → map)
-- [ ] T013 [US1] In `backend/src/RunbookPlatform.Api/Endpoints/RunbookEndpoints.cs`: extend `SaveStepItem` with optional `Instructions`/`Command`/`ExpectedResult` and `Type`; pass them through `ReplaceSteps`; include the four fields per step in the `PUT /steps` response and in `ToDetail` (FR-001/003, contracts).
-- [ ] T014 [US1] In `backend/src/RunbookPlatform.Api/Endpoints/VersionEndpoints.cs`: return `instructions`/`command`/`expectedResult`/`type` per frozen step from `GET /api/runbooks/{id}/versions/{number}` (FR-010).
+- [X] T013 [US1] In `backend/src/RunbookPlatform.Api/Endpoints/RunbookEndpoints.cs`: extend `SaveStepItem` with optional `Instructions`/`Command`/`ExpectedResult` and `Type`; pass them through `ReplaceSteps`; include the four fields per step in the `PUT /steps` response and in `ToDetail` (FR-001/003, contracts).
+- [X] T014 [US1] In `backend/src/RunbookPlatform.Api/Endpoints/VersionEndpoints.cs`: return `instructions`/`command`/`expectedResult`/`type` per frozen step from `GET /api/runbooks/{id}/versions/{number}` (FR-010).
 
 ### Tests (map to FR ids)
-- [ ] T015 [P] [US1] Integration tests `backend/tests/RunbookPlatform.Api.Tests/RichStepAuthoringTests.cs`: save+reload round-trips all detail + type (FR-001); a title-only step is accepted (FR-003); an invalid `type` returns 400 (FR-002).
-- [ ] T016 [P] [US1] Integration tests `backend/tests/RunbookPlatform.Api.Tests/RichStepVersionViewTests.cs`: a published Version returns frozen detail + type (FR-010); edit + re-publish leaves Version 1 unchanged (FR-007/008).
+- [X] T015 [P] [US1] Integration tests `backend/tests/RunbookPlatform.Api.Tests/RichStepAuthoringTests.cs`: save+reload round-trips all detail + type (FR-001); a title-only step is accepted (FR-003); an invalid `type` returns 400 (FR-002).
+- [X] T016 [P] [US1] FR-010 (version view returns frozen detail + type) and FR-007/008 (edit + re-publish leaves Version 1 unchanged) are covered in `backend/tests/RunbookPlatform.Api.Tests/RichStepFreezeTests.cs`, which asserts against the `GET /versions/{n}` endpoint — folded there rather than a separate file to avoid a redundant fixture.
 
 ### Frontend (hash-routed — C-003; no new runtime dep)
-- [ ] T017 [US1] In `frontend/src/pages/RunbookDetail.tsx`: add per-step authoring inputs — instructions (multi-line), command, expected result, and an Action/Check type selector — and send them via `saveSteps`. Title remains the only required field.
-- [ ] T018 [US1] In `frontend/src/pages/VersionView.tsx`: render each frozen step's instructions through `lib/markdown`, the command and expected result verbatim (monospaced), and the Step Type label (FR-010).
+- [X] T017 [US1] In `frontend/src/pages/RunbookDetail.tsx`: add per-step authoring inputs — instructions (multi-line), command, expected result, and an Action/Check type selector — and send them via `saveSteps`. Title remains the only required field.
+- [X] T018 [US1] In `frontend/src/pages/VersionView.tsx`: render each frozen step's instructions through `lib/markdown`, the command and expected result verbatim (monospaced), and the Step Type label (FR-010).
 
 **Checkpoint**: US1 fully functional — the MVP. A published procedure now says how, not just what.
 
@@ -78,9 +78,9 @@ Web app: `backend/src/RunbookPlatform.Api/`, `backend/tests/RunbookPlatform.Api.
 
 **Independent Test**: Start an Execution against a published Version with detail; open a Step and see the rendered detail before marking it; recording behaves as slice 03.
 
-- [ ] T019 [US2] In `backend/src/RunbookPlatform.Api/Endpoints/ExecutionEndpoints.cs` (`ToRunView`): include `instructions`/`command`/`expectedResult`/`type` for each pinned-Version step (FR-009). Recording/lifecycle unchanged (FR-015).
-- [ ] T020 [P] [US2] Integration test `backend/tests/RunbookPlatform.Api.Tests/RichStepRunViewTests.cs`: the run view returns each pinned step's detail (FR-009).
-- [ ] T021 [US2] In `frontend/src/pages/ExecutionRun.tsx`: show each step's instructions (via `lib/markdown`), command, expected result, and type before the Done/Skipped/Failed controls; a title-only step shows its title alone (FR-009).
+- [X] T019 [US2] In `backend/src/RunbookPlatform.Api/Endpoints/ExecutionEndpoints.cs` (`ToRunView`): include `instructions`/`command`/`expectedResult`/`type` for each pinned-Version step (FR-009). Recording/lifecycle unchanged (FR-015).
+- [X] T020 [P] [US2] Integration test `backend/tests/RunbookPlatform.Api.Tests/RichStepRunViewTests.cs`: the run view returns each pinned step's detail (FR-009).
+- [X] T021 [US2] In `frontend/src/pages/ExecutionRun.tsx`: show each step's instructions (via `lib/markdown`), command, expected result, and type before the Done/Skipped/Failed controls; a title-only step shows its title alone (FR-009).
 
 **Checkpoint**: US1 + US2 both work independently — the responder reads how to act as they act.
 
@@ -92,9 +92,9 @@ Web app: `backend/src/RunbookPlatform.Api/`, `backend/tests/RunbookPlatform.Api.
 
 **Independent Test**: Run and close an Execution, open its Computed Review, and confirm each timeline step shows its detail next to its outcome; coverage still lists every step incl. "not reached".
 
-- [ ] T022 [US3] In `backend/src/RunbookPlatform.Api/Endpoints/ExecutionEndpoints.cs` (`ToComputedReview`): include each pinned step's detail (instructions/command/expectedResult/type) in the `timeline` items (FR-011). Derivation stays read-only (FR-013).
-- [ ] T023 [P] [US3] Integration test `backend/tests/RunbookPlatform.Api.Tests/RichStepReviewTests.cs`: the Computed Review timeline includes step detail alongside outcomes (FR-011).
-- [ ] T024 [US3] In the frontend Computed Review rendering (`frontend/src/pages/ExecutionRun.tsx` or its review component): show each step's detail (instructions via `lib/markdown`, command/expected verbatim, type) next to its outcome (FR-011).
+- [X] T022 [US3] In `backend/src/RunbookPlatform.Api/Endpoints/ExecutionEndpoints.cs` (`ToComputedReview`): include each pinned step's detail (instructions/command/expectedResult/type) in the `timeline` items (FR-011). Derivation stays read-only (FR-013).
+- [X] T023 [P] [US3] Integration test `backend/tests/RunbookPlatform.Api.Tests/RichStepReviewTests.cs`: the Computed Review timeline includes step detail alongside outcomes (FR-011).
+- [X] T024 [US3] In the frontend Computed Review rendering (`frontend/src/pages/ExecutionRun.tsx` or its review component): show each step's detail (instructions via `lib/markdown`, command/expected verbatim, type) next to its outcome (FR-011).
 
 **Checkpoint**: all three stories independently functional.
 
@@ -102,9 +102,9 @@ Web app: `backend/src/RunbookPlatform.Api/`, `backend/tests/RunbookPlatform.Api.
 
 ## Phase 6: Polish & Cross-Cutting
 
-- [ ] T025 [P] Run `specs/004-rich-steps/quickstart.md` Scenarios A–E, including safety Scenario D (FR-005/006) and backward-compatibility Scenario E (SC-004).
-- [ ] T026 Full green: `dotnet test` (slice 01/03 unmodified) + `npm run test` (markdown safety) + `npm run build`.
-- [ ] T027 Note for release (NOT this phase): `docs/architecture.md` is amended at the post-implement release step per the constitution — record the enriched frozen Step fields and correct the stale "second bounded context" line then, not now.
+- [X] T025 [P] Run `specs/004-rich-steps/quickstart.md` Scenarios A–E, including safety Scenario D (FR-005/006) and backward-compatibility Scenario E (SC-004).
+- [X] T026 Full green: `dotnet test` (slice 01/03 unmodified) + `npm run test` (markdown safety) + `npm run build`.
+- [X] T027 Note for release (NOT this phase): `docs/architecture.md` is amended at the post-implement release step per the constitution — record the enriched frozen Step fields and correct the stale "second bounded context" line then, not now.
 
 ---
 

@@ -24,6 +24,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Step>(e =>
         {
             e.Property(s => s.Text).IsRequired();
+            // 004: Step Type stored as text (same pattern as StepOutcome).
+            e.Property(s => s.Type).HasConversion<string>();
         });
 
         modelBuilder.Entity<RunbookVersion>(e =>
@@ -37,6 +39,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<RunbookVersionStep>(e =>
         {
             e.Property(s => s.Text).IsRequired();
+            // 004: frozen Step Type stored as text.
+            e.Property(s => s.Type).HasConversion<string>();
         });
 
         modelBuilder.Entity<Execution>(e =>

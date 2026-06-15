@@ -409,6 +409,97 @@ form > input {
   background: var(--accent-soft);
 }
 
+/* 004: rich-step authoring card (title + type + detail) */
+.step-editor > li.step-edit-card {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2);
+  background: var(--surface-1);
+}
+
+.step-edit-head {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.step-edit-head .step-title {
+  flex: 1;
+}
+
+.step-edit-card textarea,
+.step-edit-card .step-command,
+.step-edit-card .step-expected {
+  width: 100%;
+  font: inherit;
+}
+
+.step-edit-card .step-command {
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+
+/* 004: Step Type badge */
+.step-type-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.step-type-badge.type-check {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* 004: shared frozen-detail display (version view, run view, review) */
+.step-head {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.step-detail {
+  margin: var(--space-1) 0 var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.step-detail-instructions {
+  color: var(--text);
+}
+
+.step-detail-instructions p {
+  margin: 0.2rem 0;
+}
+
+.step-detail-command {
+  margin: 0;
+  padding: var(--space-2);
+  background: var(--surface-2);
+  border-radius: var(--radius-1);
+  overflow-x: auto;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.85rem;
+}
+
+.step-detail-expected {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.step-detail-label {
+  font-weight: 600;
+}
+
 /* ----------------------------------------------------------------------------
    Version view (read-only)
    -------------------------------------------------------------------------- */
