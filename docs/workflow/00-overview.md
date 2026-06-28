@@ -8,8 +8,9 @@ One thing happens before all of this, once per project: you set up a **constitut
 
 ```mermaid
 flowchart TD
-    subgraph once["Once per project"]
+    subgraph once["Set up once, maintained over time"]
         INIT["specify init"] --> CONST["/constitution"] --> CFILE[/"constitution.md<br/>principles + governance"/]
+        CFILE -.->|"amend: human, dated, versioned"| CFILE
     end
     CFILE -. governs every step .-> A
     A["Idea / PRD"] --> B["/specify"]
@@ -52,6 +53,32 @@ After setup, every later command — `/specify`, `/plan`, `/tasks`, `/implement`
 reads this file to stay aligned. You set it up once and amend it rarely, on purpose.
 It is not a per-feature step, which is why it sits in the "once per project" box
 above rather than in the numbered steps.
+
+### Maintaining the constitution
+
+The constitution changes over time, but only on purpose. Treat it like a contract,
+not like notes you tidy up.
+
+- **Amend, do not quietly edit.** Record every change with a date and a reason, so the
+  history of why a rule exists stays readable. Keep a short amendment log in the file.
+- **A human owns the change.** Drafting help from the AI is fine, but adding, changing,
+  or removing a rule is a human decision. (In this repo the agent never changes the
+  constitution's state on its own — a project convention.)
+- **Change on real need, not "just in case."** A rule enters when a feature actually
+  forces it and leaves when it no longer holds. A rule that never binds is noise — drop
+  it, and if you might need it later, write down the condition that would bring it back.
+- **Keep it true.** The written constitution must match how the project really works.
+  If a rule is being ignored, either follow it or change it — do not let the document
+  and reality drift apart.
+- **Version the change.** SpecKit uses semantic versioning in the file's footer: MAJOR
+  to remove or redefine a rule, MINOR to add one, PATCH for wording fixes. Update the
+  version and the "last amended" date.
+- **Keep dependents in sync.** When a rule changes, update what relies on it — the
+  plan/spec/task templates and any docs that repeat it — so they do not contradict the
+  new rule.
+
+Avoid treating the constitution like stale documentation you "clean up" in a quick pass.
+Tidy ordinary docs that way; amend the constitution deliberately.
 
 ## How the steps connect
 
