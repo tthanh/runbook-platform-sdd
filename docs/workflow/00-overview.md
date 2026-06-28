@@ -2,7 +2,7 @@
 
 This is a structured way to control what an AI coding tool produces. It splits a feature into ordered steps — describe intent, write a spec, plan, break into tasks, implement — and puts a human review between each one. It is not "the AI writes everything". The human owns the intent, the trade-offs, the review, and the final decisions. The AI drafts, structures, compares options, and implements, but only inside scope a human has agreed to. The steps exist so the AI's output is small and inspectable at each stage, instead of one large change you have to trust or reject whole.
 
-One thing happens before all of this, once per project: you set up a **constitution** — the rules every later step must follow. The per-feature loop below runs many times; the constitution is set up once and reused.
+One thing happens before all of this: you set up a **constitution** — the rules every later step must follow. You create it once at the start and change it only when needed. The per-feature loop below then runs many times against it.
 
 ## The workflow at a glance
 
@@ -32,9 +32,10 @@ The top box runs once when the project is set up. The rest is the per-feature lo
 
 ## Before the loop: the constitution and governance
 
-Before any feature, you set up a **constitution** once. This is SpecKit's first
-command, `/constitution`, run right after `specify init`. It is the rulebook every
-later step must follow.
+Before any feature, you set up a **constitution**. This is SpecKit's first command,
+`/constitution`, run right after `specify init`. You create it once at the start, then
+change it only when there is a reason to (covered in *Maintaining the constitution*,
+below). It is the rulebook every later step must follow.
 
 It holds two kinds of content:
 
@@ -50,9 +51,9 @@ its own. (In this repo, the agent never changes the constitution's state by itse
 that is a project convention, recorded as such.)
 
 After setup, every later command — `/specify`, `/plan`, `/tasks`, `/implement` —
-reads this file to stay aligned. You set it up once and amend it rarely, on purpose.
-It is not a per-feature step, which is why it sits in the "once per project" box
-above rather than in the numbered steps.
+reads this file to stay aligned. You create it once and amend it rarely, on purpose,
+only when a real need appears. It is not a per-feature step, which is why it sits in
+the setup box above rather than in the numbered steps.
 
 ### Maintaining the constitution
 
