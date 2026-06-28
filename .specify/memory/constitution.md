@@ -88,7 +88,6 @@ screen or per-term history is needed.
 ## Engineering rules that never relax
 - Complexity is earned by a requirement in the spec, never anticipated.
 - Acceptance criteria use EARS: WHEN <condition> THE SYSTEM SHALL <behavior>.
-- No dual-writes; cross-store propagation rides the outbox.
 - Tests map to requirement ids. CI gates (leak, replay, idempotency) stay
   green once introduced.
 
@@ -162,3 +161,12 @@ screen or per-term history is needed.
   orders by DateTimeOffset MUST do so in memory after loading. Both patterns
   belong in docs/architecture.md's conflict register as standing constraints;
   this note records that they are empirically confirmed, not just theorised.
+- 2026-06-28: Removed "No dual-writes; cross-store propagation rides the outbox"
+  from the engineering rules. The app has one store and nothing to propagate, so
+  every plan marked it "satisfied trivially" — anticipated complexity, which this
+  constitution forbids elsewhere ("complexity is earned, never anticipated"). Flip
+  condition: reintroduce it (via an ADR) the first time a slice adds a second store
+  or async cross-store propagation — the moment the rule has a real problem to
+  guard. Reason: a rule that never binds is noise; defer it until a slice needs it,
+  exactly as the glossary defers terms. (The two confirmed patterns from the
+  2026-06-15 note now live in the conflict register as C-009 and within C-002.)
