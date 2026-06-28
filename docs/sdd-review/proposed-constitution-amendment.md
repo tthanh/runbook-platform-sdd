@@ -1,9 +1,9 @@
-# Proposed constitution amendment — trim a rule we don't use
+# Constitution amendment — trim a rule we don't use
 
-**Status: Proposed — awaiting human acceptance.**
-The agent does not change the constitution on its own. This is a draft for a human
-to accept (by editing the constitution) or reject. It is written the same way ADRs
-are proposed.
+**Status: Accepted — 2026-06-28.** Applied to `.specify/memory/constitution.md` on
+human instruction, with the flip condition (recommended option below). The agent
+does not change the constitution on its own; this was applied only after explicit
+human direction, and committed under the human's git identity. Kept for the record.
 
 ## The question
 
