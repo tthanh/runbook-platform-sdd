@@ -160,6 +160,24 @@ Examples of foundational tasks (adjust based on your project):
 
 ---
 
+## Phase N+1: Closeout (constitution "After implement" — required before the next initiative)
+
+**Purpose**: the steps the constitution requires after implement. These are not
+optional and not "later" — the next initiative does not advance until they are done.
+Generate these tasks for every feature.
+
+- [ ] TXXX Amend `docs/architecture.md` with what is now true across features: update
+      the context map / NFRs, and **add or correct any conflict-register entries** this
+      slice introduced or invalidated (new invariants, schema mechanism, ordering rules).
+      A stale conflict register silently breaks the `/speckit.plan` check that reads it.
+- [ ] TXXX Add the release entry to `RELEASE_NOTES.md` (reference the spec folder and the
+      ADRs) and create the git tag. Tags follow **release order**; see docs/prd-register.md
+      "Release tags".
+- [ ] TXXX Write the retro line in the `docs/prd-register.md` artifact ledger and flip the
+      initiative's status to **Released**.
+
+---
+
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
