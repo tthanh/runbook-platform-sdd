@@ -51,9 +51,17 @@ One meaning per word in specs, plans, tasks, code, events, commits:
   so a title-only Step is valid; a published version freezes a Step's title,
   detail, and type immutably.
 - **Step Type** — the classification of a Step by the kind of work it represents;
-  one of Action (do something) or Check (verify a condition or observe a result).
-  Descriptive only — it does not change a Step's required fields or how it is
-  executed. Decision and Gate types are deferred with branching.
+  one of Action (do something), Check (verify a condition or observe a result), or
+  Decision (choose among named options, each routing to a target step). Action and
+  Check are descriptive only — they do not change a Step's required fields or how it
+  is executed; Decision changes execution navigation, because the responder's choice
+  selects the next step. Gate (manual approval) is deferred with the remaining
+  branching work.
+- **Option** — a named choice on a Decision step (e.g. "Database reachable" /
+  "Database down"); selecting it during an execution routes to its target step. An
+  Option is frozen into the runbook version at publish, alongside the step.
+- **Target Step** — the step an Option routes to. The reference is frozen at publish
+  and survives the version freeze unchanged, exactly as a Step's other content does.
 - **Execution** — a single run of a runbook against one incident; it pins exactly
   one runbook version when it starts and never re-pins.
 - **Version Pin** — the fixed binding of an execution to the one runbook version
@@ -62,9 +70,14 @@ One meaning per word in specs, plans, tasks, code, events, commits:
   an execution: which step, when, outcome (done/skipped/failed), optional note;
   the ground-truth fact of what was done. The actor ("who") is deferred until
   authentication exists — no slice captures it yet.
+- **Taken Path** — the ordered sequence of steps actually reached in an execution,
+  determined by the Options chosen at Decision steps; for a runbook with no Decision
+  steps it is simply every step in order. It is the denominator for Computed Review
+  coverage.
 - **Computed Review** — the post-incident timeline derived mechanically from an
   execution's step records against its pinned version; computed, never authored
-  from memory.
+  from memory. Coverage is computed over the taken path — every step actually
+  reached — so steps on a branch not taken are reported as NotReached, not Skipped.
 - **Incident** — the real-world event an execution responds to; a boundary term —
   identity is owned by an external incident-management tool, and we hold a
   reference, not the source of truth.
@@ -223,4 +236,20 @@ it, the constitution wins. Plans and reviews verify compliance with these princi
   semantic versioning starting at 1.0.0. Reason: align with the shipped template so
   every section has a documented purpose and nothing is bespoke without reason.
 
-**Version**: 1.0.0 | **Ratified**: 2026-06-11 | **Last Amended**: 2026-06-28
+- 2026-06-28: Branching language ratified — initiative 05 workshop, ratified by the
+  human reviewer. Step Type gains a third member, **Decision** (choose among named
+  options, each routing to a target step); unlike Action/Check it is *not*
+  descriptive-only — it changes execution navigation, which is the point of the
+  slice. **Gate** (manual approval) stays deferred, so the enum grows by exactly one.
+  Three new terms enter: **Option**, **Target Step**, **Taken Path**. **Computed
+  Review** is redefined so coverage is computed over the taken path (untaken-branch
+  steps are NotReached, not Skipped) — additive in practice, since the execution
+  slice already distinguishes NotReached from Skipped. The slice that needs this
+  language (05-branching) is being built, so the terms enter per the rule (ratified
+  + a slice needs them). Glossary now holds 12 terms — nearing but not past the flip
+  to docs/glossary.md; monitor at the next amendment. Reason: a linear-only procedure
+  cannot encode contingency; the language enters exactly when the branching slice
+  requires it, and stays minimal (one new type, no condition-expressions, gates,
+  loops, or parallel paths) to keep complexity earned.
+
+**Version**: 1.1.0 | **Ratified**: 2026-06-11 | **Last Amended**: 2026-06-28
