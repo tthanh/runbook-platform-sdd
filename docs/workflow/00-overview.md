@@ -6,15 +6,15 @@ This is a structured way to control what an AI coding tool produces. It splits a
 
 ```mermaid
 flowchart TD
-    A[Idea / PRD] --> B[/specify]
-    B --> C[Spec review and clarification]
-    C --> D[/plan]
-    D --> E[Plan review]
-    E --> F[/tasks]
-    F --> G[Task review]
-    G --> H[Implementation]
-    H --> I[Testing / validation]
-    I --> J[Pull request / delivery]
+    A["Idea / PRD"] --> B["/specify"]
+    B --> C["Spec review and clarification"]
+    C --> D["/plan"]
+    D --> E["Plan review"]
+    E --> F["/tasks"]
+    F --> G["Task review"]
+    G --> H["Implementation"]
+    H --> I["Testing / validation"]
+    I --> J["Pull request / delivery"]
     C -. revise .-> B
     E -. revise .-> D
     G -. revise .-> F
