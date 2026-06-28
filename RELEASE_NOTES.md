@@ -1,3 +1,56 @@
+# Release Notes — v0.1.4
+
+**Released**: 2026-06-28
+**Initiative**: 03-runbook-execution
+**Spec folder**: specs/003-runbook-execution/
+**ADRs**: ADR-0004 (version pin holds mid-incident publish), ADR-0005 (Incident as foreign reference)
+
+## What ships
+
+A published Runbook can now be **run against an incident**. A responder starts an Execution, which
+**pins** the Runbook's current Version (ADR-0004) and stays pinned even if a newer Version is
+published mid-incident. Each Step is marked **Done / Skipped / Failed** with an optional note; marks
+are append-only Step Records, recordable out of order, and re-marking appends (latest wins). The
+Execution is closed manually, after which a **Computed Review** is derived on read — a chronological
+timeline plus per-Step coverage, with `NotReached` distinguished from `Skipped`.
+
+> **Release ordering note:** slice 003 was implemented before slice 004 but released after it, so it
+> carries the later tag `v0.1.4`. `v0.1.3` (rich steps) already records that EF Core migrations were
+> *adopted* in this slice.
+
+## User stories delivered
+
+| Story | Description | Status |
+|-------|-------------|--------|
+| US1 | Run a published Version (pinned), record each Step outcome as an append-only record | Done |
+| US2 | Close the run manually; read the Computed Review (timeline + coverage) | Done |
+| US3 | Pin integrity — the run/review stay bound to the pinned Version after a later publish | Done |
+
+## Functional requirements covered
+
+FR-001/002 (pin a published Version, refuse unpublished), FR-004–008 (append-only records, out-of-order,
+optional note, no actor captured), FR-009/010 (manual close only, no recording after close),
+FR-011–013 (Computed Review timeline/coverage, `NotReached` ≠ `Skipped`, only when closed),
+FR-015 (one open Execution per incident). See `specs/003-runbook-execution/spec.md`.
+
+## Architectural outcome
+
+- **Schema mechanism migrated** — slice 001's `EnsureCreated` was retired for EF Core migrations
+  (initial migration reproduces the 001/002 schema byte-for-byte; execution tables added additively).
+  Recorded as the corrected **C-002**.
+- **Stayed one bounded context** — Incident is a foreign reference (ADR-0005), so no second context
+  was introduced, correcting the slice-001 expectation. **C-008** records this.
+- **C-007** (ADR-0004) — the Version pin is immutable for an Execution's lifetime.
+- New NFRs: append-only records, manual-close-only, review-computed-on-read.
+
+## Test coverage
+
+Backend xUnit (`WebApplicationFactory`): start/pin, recording, resume, close, Computed Review, and
+pin-integrity suites — all green. The 18 authoring tests pass **unmodified** against the migrated
+schema (`git diff` under `backend/tests/` shows only new execution test files).
+
+---
+
 # Release Notes — v0.1.3
 
 **Released**: 2026-06-28

@@ -105,7 +105,7 @@ Web app: `backend/src/RunbookPlatform.Api/`, `backend/tests/RunbookPlatform.Api.
 - [x] T027 Walk [quickstart.md](quickstart.md) end-to-end against the running app (start/record/pin/close/review/resume/refuse paths).
 - [x] T028 Final regression: `dotnet test` all green; **18 authoring tests unmodified** (`git diff --stat backend/tests/` shows only new execution test files).
 - [x] T029 [P] Tidy execution response DTOs / mapping at the endpoint seam (no entity leakage), consistent with slice-01 style.
-- [ ] T030 Record the post-implement obligation: at release, amend `docs/architecture.md` — add the execution entities/NFRs, add Execution-context truth, and **correct the "second bounded context" line** to one context (ADR-0005); write the retro line + tag (constitution "after implement").
+- [x] T030 Record the post-implement obligation: at release, amend `docs/architecture.md` — add the execution entities/NFRs, add Execution-context truth, and **correct the "second bounded context" line** to one context (ADR-0005); write the retro line + tag (constitution "after implement"). Done 2026-06-28: released as v0.1.4.
 
 ---
 
