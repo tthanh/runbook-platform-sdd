@@ -1,3 +1,53 @@
+# Release Notes — v0.1.3
+
+**Released**: 2026-06-28
+**Initiative**: 04-rich-steps
+**Spec folder**: specs/004-rich-steps/
+**ADRs**: ADR-0006 (markdown rendering & sanitization), ADR-0007 (Step Type taxonomy)
+
+## What ships
+
+A Step is now executable detail, not a bare title. An author can give each Step optional
+**instructions**, a **command**, and an **expected result** (all markdown), plus a required
+**Step Type** (`Action` or `Check`, default `Action`). The detail is frozen into the published
+Runbook Version and surfaced during a run and in the Computed Review. Branching between steps is
+explicitly deferred to a later initiative.
+
+## User stories delivered
+
+| Story | Description | Status |
+|-------|-------------|--------|
+| US1 | Author a Step with structured detail and a type; publish freezes it (MVP) | Done |
+| US2 | Run a published Version with the step detail visible to the operator | Done |
+| US3 | Step detail and type carried through to the Computed Review | Done |
+
+## Functional requirements covered
+
+Title stays required (R1 / FR-003), `StepType ∈ {Action, Check}` is enforced in the aggregate
+(FR-002), all four fields are frozen at publish (FR-007) and immutable on earlier Versions
+(FR-008). See `specs/004-rich-steps/spec.md` for the full set.
+
+## Architectural outcome
+
+- **C-002 corrected** — the conflict register now records EF Core migrations as the schema
+  mechanism (adopted in slice 003); this slice adds the additive `AddStepDetail` migration. No
+  table added or dropped.
+- **C-005** (ADR-0006) — step detail renders through a hand-rolled escape-first whitelist renderer
+  (`frontend/src/lib/markdown.ts`); no markdown or sanitizer dependency added.
+- **C-006** (ADR-0007) — `StepType` is a closed `{ Action, Check }` enum, validated in the
+  aggregate, persisted as a string.
+
+## Test coverage
+
+- Backend: 46 xUnit tests green — the 39 slice-01/03 tests pass **unmodified** (`git diff` under
+  `backend/tests/` is empty), plus 7 new rich-step freeze/validation tests.
+- Frontend: 8 vitest tests green covering the ADR-0006 markdown safety invariants (HTML escaped,
+  `<script>` neutralised, `javascript:` links blocked). `npm run build` green.
+
+The vitest runner is **dev-only** — no runtime dependency was added.
+
+---
+
 # Release Notes — v0.1.2
 
 **Released**: 2026-06-15
