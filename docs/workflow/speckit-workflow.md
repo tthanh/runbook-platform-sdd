@@ -1,46 +1,53 @@
-# SpecKit workflow: PRD → implementation
+# SpecKit workflow: spec to implementation
 
-The point of SpecKit: turn vague business intent into clear, testable requirements
-**before** any architecture or code. You decide *what* and *why* first, lock it with a
-human, then move to *how*.
+The point of SpecKit: turn vague intent into clear, testable requirements **before** any
+architecture or code. You decide *what* and *why* first, then *how*, then build.
 
-**Two rules hold at every step:**
+**Two habits hold throughout:**
 
-1. **A human reviews between steps.** Each command produces a draft; a person checks
-   it before the next command runs. The arrows that loop back are not failures — they
-   are the normal way work tightens.
-2. **The AI never invents missing scope.** If something is unclear or absent, it marks
-   the gap (and asks) — it does not quietly fill it in. Silent guessing is the main
-   thing this process exists to prevent.
+1. **Review between steps.** Each command produces a draft. Read it before running the
+   next one. The loop-back arrows are normal — that's how the work tightens.
+2. **The AI flags gaps; it does not invent scope.** If something is unclear or missing,
+   it says so (and asks). It does not quietly fill it in.
 
-## The flow
+> Note: standard SpecKit *recommends* the reviews and gives you tools for them
+> (`/clarify`, `/analyze`), but it does not force them. The hard gates in this repo
+> (a required PRD, human ADR acceptance) are this project's own additions — see the last
+> section.
+
+---
+
+## The standard SpecKit flow
+
+This is stock SpecKit, the same for any project.
 
 ```mermaid
 flowchart TD
-    PRD[/"PRD — business intent<br/>written and approved by a human"/]:::artifact
+    INIT["specify init<br/>(scaffold once)"]:::step
+    CONST(["/constitution"]):::ai
+    CONSTOUT[/"constitution.md<br/>project principles"/]:::artifact
     SPECIFY(["/specify"]):::ai
-    SPEC[/"spec.md — what and why<br/>testable acceptance criteria"/]:::artifact
-    SREV{"Human review:<br/>clear, complete, in scope?"}:::human
+    SPEC[/"spec.md — what and why"/]:::artifact
+    SREV{"Review (optional /clarify):<br/>clear, complete?"}:::human
     PLAN(["/plan"]):::ai
-    PLANOUT[/"plan.md + ADRs (Proposed)"/]:::artifact
-    PREV{"Human review:<br/>plan ok? accept/reject each ADR"}:::human
+    PLANOUT[/"plan.md + design docs"/]:::artifact
+    PREV{"Review the plan"}:::human
     TASKS(["/tasks"]):::ai
-    TASKOUT[/"tasks.md — ordered<br/>tests map to requirement ids"/]:::artifact
-    TREV{"Human review:<br/>right-sized? nothing missing?"}:::human
+    TASKOUT[/"tasks.md — ordered"/]:::artifact
+    TREV{"Review (optional /analyze):<br/>consistent, complete?"}:::human
     IMPL(["/implement"]):::ai
-    TEST["Tests run<br/>(named for requirement ids)"]:::step
-    PR["Pull request<br/>then closeout: architecture, tag, retro"]:::step
-    DONE([Released]):::step
+    TEST["Tests run"]:::step
+    PR["Pull request"]:::step
 
-    PRD --> SPECIFY --> SPEC --> SREV
+    INIT --> CONST --> CONSTOUT --> SPECIFY --> SPEC --> SREV
     SREV -- needs work --> SPECIFY
-    SREV -- approved --> PLAN --> PLANOUT --> PREV
-    PREV -- needs work / ADR rejected --> PLAN
-    PREV -- approved + ADRs accepted --> TASKS --> TASKOUT --> TREV
+    SREV -- ok --> PLAN --> PLANOUT --> PREV
+    PREV -- needs work --> PLAN
+    PREV -- ok --> TASKS --> TASKOUT --> TREV
     TREV -- needs work --> TASKS
-    TREV -- approved --> IMPL --> TEST
+    TREV -- ok --> IMPL --> TEST
     TEST -- fail --> IMPL
-    TEST -- pass --> PR --> DONE
+    TEST -- pass --> PR
 
     classDef ai fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
     classDef human fill:#fef9c3,stroke:#ca8a04,color:#713f12;
@@ -48,121 +55,156 @@ flowchart TD
     classDef step fill:#f1f5f9,stroke:#475569,color:#0f172a;
 ```
 
-Legend: **blue** = AI command · **yellow** = human gate · **green** = document ·
+Legend: **blue** = AI command · **yellow** = human review · **green** = document ·
 **grey** = action/result.
 
----
+### Step by step
 
-## Step by step
+Each step lists: does · in · out · behind the scenes · do · avoid.
 
-Each step lists: what it does · in · out · behind the scenes · do · avoid.
+#### 1. `specify init` (one time)
+- **Does:** Scaffolds SpecKit into the repo.
+- **In:** Your choice of AI agent and script type.
+- **Out:** `.specify/` (templates, scripts, memory) plus the commands/skills for your tool.
+- **Behind the scenes:** Writes the machinery the later commands rely on.
+- **Do:** Run once at the start.
+- **Avoid:** Hand-editing the generated machinery without a reason.
 
-### 1. PRD
-- **Does:** States the problem, who it's for, the scope, and the non-goals. The
-  approved starting point.
-- **In:** Discovery notes and workshop output (the agreed words for things).
-- **Out:** `docs/initiatives/NN-name/prd.md`, approved by a human.
-- **Behind the scenes:** Not a SpecKit command — written and reviewed by people. The
-  rules block `/specify` if no approved PRD exists.
-- **Do:** Make non-goals explicit. Keep one clear appetite. Answer the workshop's open
-  questions here.
-- **Avoid:** Putting solutions or architecture in the PRD. Starting `/specify` without one.
+#### 2. `/constitution` (before any feature)
+- **Does:** Writes the project's governing principles that every later step honors.
+- **In:** Your principles (interactive or provided).
+- **Out:** `.specify/memory/constitution.md`.
+- **Behind the scenes:** Fills the constitution template; all other commands read this file.
+- **Do:** Keep principles short, testable, and non-negotiable.
+- **Avoid:** Implementation detail here — that belongs in specs.
 
-### 2. `/specify`
-- **Does:** Turns the PRD into a formal spec — numbered requirements and testable
-  acceptance criteria.
-- **In:** The approved PRD path.
-- **Out:** `specs/NNN-name/spec.md`; register status → Specify.
-- **Behind the scenes:** A script scaffolds the spec folder and branch; the skill fills
-  the spec template; the agent-context note may refresh.
-- **Do:** Write each requirement so a test could prove it (WHEN … THE SYSTEM SHALL …).
-  Mark anything unknown as NEEDS CLARIFICATION.
-- **Avoid:** Adding scope the PRD didn't ask for. Choosing tech here.
+#### 3. `/specify`
+- **Does:** Turns a plain description of a feature into a formal spec — what and why, not
+  tech.
+- **In:** A natural-language description of what you want to build.
+- **Out:** `spec.md` plus a feature branch/folder.
+- **Behind the scenes:** A script scaffolds the folder/branch; the skill fills the spec
+  template.
+- **Do:** Focus on user-visible behavior. Mark unknowns instead of guessing.
+- **Avoid:** Tech choices. Scope the request didn't include.
 
-### 3. Spec review (human)
-- **Does:** A person checks the spec is clear, complete, and matches the PRD.
+#### 4. Spec review (recommended) — with `/clarify`
+- **Does:** You check the spec; `/clarify` asks up to ~5 targeted questions and writes the
+  answers back in.
 - **In:** `spec.md`.
-- **Out:** Approved spec, or change requests (loop back to `/specify`).
-- **Behind the scenes:** `/clarify` can ask a few targeted questions and write the
-  answers back into the spec.
-- **Do:** Confirm every requirement is testable and traces to the PRD.
-- **Avoid:** Rubber-stamping. Letting NEEDS CLARIFICATION items through.
+- **Out:** A tighter spec.
+- **Behind the scenes:** `/clarify` edits the spec with your answers.
+- **Do:** Resolve ambiguities before planning.
+- **Avoid:** Moving to `/plan` with open unknowns.
 
-### 4. `/plan`
-- **Does:** Decides *how* to build it. Promotes contested decisions to ADRs, marked
-  Proposed.
-- **In:** Approved spec; the architecture conflict register.
-- **Out:** `plan.md` (+ research, data model, contracts); ADRs as Proposed; register → Plan.
-- **Behind the scenes:** A script sets up the plan; the skill checks the conflict
-  register and states which conflicts this work touches. If a choice needs information
-  the documents don't contain, it **asks** rather than picks.
-- **Do:** Record real decisions as ADRs, each with a flip condition. Check the conflict
-  register.
-- **Avoid:** Burying decision rationale in the plan. Silently picking when the docs
-  don't settle it.
+#### 5. `/plan`
+- **Does:** Turns the spec into a technical plan — stack, architecture, design docs.
+- **In:** The spec + your tech direction.
+- **Out:** `plan.md` plus research / data model / contracts / quickstart.
+- **Behind the scenes:** A script sets up the plan; the skill fills the plan template.
+- **Do:** State your real constraints (stack, integrations).
+- **Avoid:** Re-deciding *what* — that was the spec's job.
 
-### 5. Plan review + ADR acceptance (human)
-- **Does:** A person reviews the plan and accepts or rejects each ADR.
-- **In:** `plan.md` + Proposed ADRs.
-- **Out:** Each ADR flipped to Accepted (or Rejected) in its own human commit; plan
-  approved.
-- **Behind the scenes:** `/tasks` is **blocked** while any referenced ADR is still
-  Proposed. The AI never flips an ADR's status itself.
-- **Do:** Decide each ADR on purpose. Keep the written status true.
-- **Avoid:** Running `/tasks` with Proposed ADRs. Accepting an ADR the AI flipped.
+#### 6. Plan review (recommended)
+- **Does:** You check the plan is sound and matches the spec.
+- **In:** `plan.md` + design docs.
+- **Out:** Approved plan, or changes (loop back to `/plan`).
+- **Behind the scenes:** —
+- **Do:** Sanity-check the architecture and the design docs.
+- **Avoid:** Rubber-stamping.
 
-### 6. `/tasks`
-- **Does:** Breaks the plan into an ordered, testable task list.
-- **In:** Approved plan + accepted ADRs.
-- **Out:** `tasks.md` — phased, dependency-ordered, tests mapped to requirement ids;
-  register → Tasks.
-- **Behind the scenes:** A script sets up tasks; they're grouped by phase/user story and
-  include a closeout phase.
-- **Do:** MVP first. Map each test to a requirement id. Mark tasks that can run in
-  parallel.
-- **Avoid:** Vague tasks. Dependencies that stop a slice from shipping on its own.
+#### 7. `/tasks`
+- **Does:** Breaks the plan into an ordered, actionable task list.
+- **In:** Plan + design docs.
+- **Out:** `tasks.md` — phased, dependency-ordered.
+- **Behind the scenes:** A script sets up tasks; the skill fills the tasks template.
+- **Do:** Keep tasks small and independently testable.
+- **Avoid:** Vague tasks.
 
-### 7. Task review (human)
-- **Does:** A person checks the breakdown is right-sized and complete.
-- **In:** `tasks.md`.
-- **Out:** Approved tasks, or revisions (loop back to `/tasks`).
-- **Behind the scenes:** `/analyze` can cross-check spec, plan, and tasks for gaps and
-  contradictions.
-- **Do:** Confirm the MVP ships on its own. Confirm nothing is missing.
-- **Avoid:** Approving a task that doesn't trace back to a requirement.
+#### 8. Task review (recommended) — with `/analyze`
+- **Does:** You check the breakdown; `/analyze` cross-checks spec, plan, and tasks for
+  gaps and contradictions (after `/tasks`, before `/implement`).
+- **In:** `tasks.md` (+ spec + plan).
+- **Out:** A consistent task list.
+- **Behind the scenes:** `/analyze` reports problems; it doesn't change files.
+- **Do:** Run `/analyze` before implementing.
+- **Avoid:** Implementing with known inconsistencies.
 
-### 8. Implementation (`/implement`)
+#### 9. `/implement`
 - **Does:** Works through the tasks in order, writing code and tests.
-- **In:** Approved `tasks.md`.
-- **Out:** Working code + tests; tasks checked off; register → Implement.
-- **Behind the scenes:** Follows the engineering rules — earned complexity, testable
-  criteria, tests mapped to ids. Regression checks keep earlier tests green.
-- **Do:** Commit per task or logical group. Keep older tests passing, unchanged.
-- **Avoid:** Adding complexity no requirement asked for. Editing old tests to make new
-  code pass.
+- **In:** `tasks.md`.
+- **Out:** Working code + tests.
+- **Behind the scenes:** Follows the constitution's rules.
+- **Do:** Commit per task or logical group. Keep tests green.
+- **Avoid:** Adding complexity no task asked for.
 
-### 9. Testing
-- **Does:** Runs the suite; each test is named for the requirement it covers.
+#### 10. Testing
+- **Does:** Runs the suite.
 - **In:** The implemented code.
-- **Out:** Green suite, or failures (loop back to implementation).
-- **Behind the scenes:** Earlier suites must stay green and unmodified — that proves old
-  behavior still holds.
+- **Out:** Green suite, or failures (loop back to `/implement`).
+- **Behind the scenes:** —
 - **Do:** See a test fail before you make it pass. Keep the suite green.
-- **Avoid:** Skipping tests. Weakening a check just to go green.
+- **Avoid:** Skipping tests or weakening checks to pass.
 
-### 10. PR + closeout
-- **Does:** Opens the pull request. After merge, runs the closeout the rules require.
+#### 11. Pull request
+- **Does:** Opens the PR for review and merge.
 - **In:** The implemented, tested branch.
-- **Out:** Merged PR; architecture updated; release tagged; retro written; register →
-  Released.
-- **Behind the scenes:** The next initiative does not start until this closeout is done.
-- **Do:** Update the conflict register. Tag in release order. Write the retro line.
-- **Avoid:** Skipping closeout. Starting the next initiative before this one is released.
+- **Out:** Merged change.
+- **Behind the scenes:** —
+- **Do:** Keep the PR scoped to the feature.
+- **Avoid:** Bundling unrelated changes.
+
+### Optional helpers
+- **`/clarify`** — targeted questions to tighten the spec (before `/plan`).
+- **`/analyze`** — consistency check across spec/plan/tasks (before `/implement`).
+- **`/checklist`** — generate a quality checklist for the feature.
+
+These support the human reviews; they don't replace them.
 
 ---
 
-## The one-line version
+## This project's pre-pipeline layer (for showcase)
 
-PRD (agreed problem) → spec (testable *what*) → plan (*how* + recorded decisions) →
-tasks (ordered work) → code → tests → PR. A human signs off between each step, and the
-AI flags gaps instead of guessing.
+This repo wraps the standard flow with a **custom front layer** to demonstrate the work
+that happens *before* and *around* SpecKit. **None of this is stock SpecKit** — the repo's
+own `CLAUDE.md` states: *"docs/ is NOT part of the Spec Kit SDD flow."*
+
+```mermaid
+flowchart LR
+    DISC["discovery<br/>(problem, appetite)"]:::pre --> WS["workshop<br/>(agree the words)"]:::pre --> PRD[/"PRD — approved"/]:::pre --> GATE{"PRD gate"}:::gate --> SPECIFY(["/specify ..."]):::ai
+    SPECIFY --> REST["standard SpecKit flow<br/>(above)"]:::step
+    REST --> CLOSE["closeout<br/>architecture + tag + retro"]:::pre
+
+    classDef pre fill:#ede9fe,stroke:#7c3aed,color:#4c1d95;
+    classDef gate fill:#fee2e2,stroke:#dc2626,color:#7f1d1d;
+    classDef ai fill:#dbeafe,stroke:#2563eb,color:#1e3a8a;
+    classDef step fill:#f1f5f9,stroke:#475569,color:#0f172a;
+```
+
+What the layer adds, and why it's not standard:
+
+- **Discovery → workshop → PRD** in `docs/initiatives/NN-name/`, written and checked with
+  custom skills (`prd-writer`, `prd-reviewer` — note: no `speckit-` prefix, so not stock).
+  This shows the upfront thinking before a feature is specified.
+- **A PRD gate.** This project's constitution requires an *approved PRD* before
+  `/specify` runs. Stock SpecKit lets `/specify` start from a plain description with no
+  PRD. This is the biggest difference.
+- **ADRs as a hard gate.** At `/plan`, contested decisions become ADRs marked Proposed; a
+  human accepts each in its own commit, and `/tasks` is blocked until they're accepted
+  (custom skill: `adr-reviewer`). Standard SpecKit has no such gate.
+- **A register + closeout.** `docs/prd-register.md` tracks status, and after `/implement`
+  the project requires a closeout — amend the architecture, tag a release, write a retro —
+  before the next initiative starts.
+
+In short: the standard flow is the engine; this layer is scaffolding around it to show the
+full lifecycle — from a rough business problem, through SpecKit, to a released and recorded
+change.
+
+---
+
+## One-line version
+
+**Standard SpecKit:** `/constitution` → `/specify` → `/plan` → `/tasks` → `/implement`,
+with a human review between each (helped by `/clarify` and `/analyze`).
+**This repo adds:** a PRD (and a gate) in front, ADR acceptance inside, and a closeout
+after — to showcase the work around the pipeline.
