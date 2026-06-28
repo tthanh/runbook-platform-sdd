@@ -1,3 +1,23 @@
+# APPLIED 2026-06-28 — restructured constitution (kept for the record)
+
+This was applied to `.specify/memory/constitution.md` on 2026-06-28, on human
+instruction, after web research confirmed the structure matches the official Spec Kit
+`/speckit.constitution` requirements (Core Principles + Governance + semver + version
+footer) and real-world examples. No rule was changed; content was relocated. The live
+constitution is the source of truth; this file is a record of the mapping.
+
+How each prior section moved:
+
+- "Inputs and status" → Principle II + Development Workflow
+- "Decisions" → Principle IV (the value) + Development Workflow (the procedure) + Governance (lifecycle)
+- "Language (binding glossary)" → Principle III (the rule) + Additional Constraints (the terms)
+- "Architecture coherence" → Additional Constraints
+- "Engineering rules that never relax" → Principle I (complexity) + Principle V (EARS, tests, CI gates)
+- "After implement" → Development Workflow
+- "Amendments" → Governance (verbatim, plus one new entry recording this restructure)
+
+--- 8< --- everything below replaces constitution.md ---
+
 # Runbook Platform Constitution
 
 ## Core Principles
