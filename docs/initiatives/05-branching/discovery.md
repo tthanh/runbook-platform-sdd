@@ -1,10 +1,11 @@
 # Discovery — 05-branching
 
-> **DRAFT — compiled 2026-06-28.** Verdict **PENDING human**. Appetite and the
-> Go/No-go decision cannot be inherited (discovery template) — both are recorded
-> below as recommendations awaiting the reviewer's call. Demonstration platform:
-> demand is a stated assumption with illustrative numbers, not validated field
-> evidence (carried from [01 discovery](../01-versioned-runbook-execution/discovery.md)).
+> **FINALIZED — 2026-06-28.** Verdict **Go** (human reviewer). Register moves
+> `Registered → Discovery`; the workshop is next (branching fails the skip test).
+> Appetite and the Go/No-go decision cannot be inherited (discovery template) —
+> both are recorded by the reviewer below. Demonstration platform: demand is a
+> stated assumption with illustrative numbers, not validated field evidence
+> (carried from [01 discovery](../01-versioned-runbook-execution/discovery.md)).
 
 Discovery test: this is a **new problem**, not an inherited consequence. The prior
 slices deliberately kept execution linear; branching was named OUT of 03 and 04 on
@@ -61,26 +62,24 @@ authoring + execution + rich-content foundation (01/03/04) under-delivers exactl
 where pressure is highest.
 
 ## Appetite
-**RECOMMENDATION — pending human.** Branching is materially larger than the prior
-"couple of evenings" slices: it breaks **two shipped invariants** — linear
-execution (C-007 reads pin through positions; Execution is a linear walk) and
-Computed Review "coverage = every step" — and needs its own ADRs (execution/
-navigation model, coverage redefinition, the deferred `Decision`/`Gate` step
-types). Recommend boxing the **first** branching slice to the **minimal
-Decision-Flow model** and cutting hard if it overruns:
-- IN (proposed): a step can offer **named options**, each routing to a target
-  step; an Execution follows the **taken path**; coverage is redefined as "every
-  step on the taken path" (untaken-path steps are *not* counted as Skipped).
-- OUT (proposed, defer again): condition-expression branching (`field op value`),
+**Set by the reviewer 2026-06-28: minimal Decision-Flow model, cut hard if it
+overruns.** Branching is materially larger than the prior "couple of evenings"
+slices: it breaks **two shipped invariants** — linear execution (C-007 reads pin
+through positions; Execution is a linear walk) and Computed Review "coverage =
+every step" — and needs its own ADRs (execution/navigation model, coverage
+redefinition, the deferred `Decision`/`Gate` step types). The **first** branching
+slice is boxed to:
+- **IN:** a step can offer **named options**, each routing to a target step; an
+  Execution follows the **taken path**; coverage is redefined as "every step on
+  the taken path" (untaken-path steps are *not* counted as Skipped).
+- **OUT (defer again):** condition-expression branching (`field op value`),
   loops/back-edges, gates/approvals, parallel paths, and automated evaluation.
 
-This keeps the slice to one paradigm and one invariant rewrite. Final time-box is
-the human's call.
+This keeps the slice to one paradigm and one invariant rewrite. If it overruns,
+**cut scope, don't extend** — the cut line is the OUT list above.
 
 ## Go–No-go + date
-**PENDING — recommend Go (2026-06-28)** with the narrow Decision-Flow scope above.
-A No-go would look like: the linear model is good enough for the demonstration's
-purposes, or branching cannot be scoped under the appetite without dragging in a
-full graph/condition engine. Neither appears to hold for the minimal scope, but
-the decision — and the appetite — are the reviewer's to record here before this
-moves to a workshop.
+**Go — 2026-06-28** (human reviewer), with the narrow Decision-Flow scope above.
+A No-go would have looked like: the linear model is good enough for the
+demonstration's purposes, or branching cannot be scoped under the appetite without
+dragging in a full graph/condition engine. Neither held for the minimal scope.
