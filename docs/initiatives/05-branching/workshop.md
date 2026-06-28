@@ -27,8 +27,11 @@ Decision-Flow model** the reviewer set as the appetite ([discovery.md](discovery
 - Date: 2026-06-28
 - Facilitator: (demo) — compiled by AI scribe
 - Participants: none live (demonstration); framing from [discovery.md](discovery.md)
-- Reviewer: human — **pending** (must ratify the `Decision` Step Type + the
-  routing terms, or amend them, before PRD-05)
+- Reviewer: human — **ratified 2026-06-28**. Accepted the `Decision` Step Type
+  (enum grows by one; Gate stays deferred), the routing terms (Option, Target Step,
+  Taken Path), and the Computed Review coverage redefinition exactly as proposed.
+  Amended into the constitution in a separate ratification commit (v1.1.0), the way
+  slices 01/03/04 split proposal from ratification.
 
 ## Event timeline
 Past-tense events across authoring and a single branched run. Authoring events are
