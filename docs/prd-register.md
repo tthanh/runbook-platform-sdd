@@ -12,7 +12,7 @@ Skip recorded → PRD → Specify → Plan → Tasks → Implement → Released
 | 2 | 02-rich-domain-model | Structural: enforce domain invariants inside aggregates (ADR-0003) | Released |
 | 3 | 03-runbook-execution | Run a published version against an incident: pin the version, record every step as it happens, compute the review from the records | Released |
 | 4 | 04-rich-steps | Enrich a Step beyond a single title — structured detail (instructions, command, expected result) and a step type — so a published runbook is executable, not a list of vague titles. Branching deferred to a later initiative. | Released |
-| 5 | 05-branching | Let a run take different paths instead of one straight line, so a procedure can encode "if X do A, else do B" instead of flattening every contingency into one list. | Specify (PRD approved 2026-07-01; spec drafted, 2 clarify open) |
+| 5 | 05-branching | Let a run take different paths instead of one straight line, so a procedure can encode "if X do A, else do B" instead of flattening every contingency into one list. | Specify (spec clarified 2026-07-01; ready for plan) |
 | 6 | 06-run-history-and-replay | Turn closed executions from write-only islands into a browsable, searchable history and let a reviewer replay a single run step by step — so the "how did we respond, and how do we respond better?" learning loop actually closes. | Specify (spec clarified; ready for plan) — build gated behind 05 |
 
 ## Artifact ledger

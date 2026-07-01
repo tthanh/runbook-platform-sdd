@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain
+- [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -31,14 +31,11 @@
 
 ## Notes
 
-- **Two deliberate `[NEEDS CLARIFICATION]` markers remain**, both carried from the
-  PRD's own open questions and destined for `/speckit.clarify`:
-  - **FR-018 (H4)** — what content a Decision Step carries (reuse rich-step detail
-    fields vs. prompt + Options only).
-  - **FR-017 (H5)** — which publish-time validation conditions are blocking errors
-    vs. author warnings (dead-ends, unreachable Steps, minimum Options).
-  Neither blocks planning of the routing/run/review mechanics; they scope the
-  authoring form and publish gate.
+- **Resolved 2026-07-01 via `/speckit.clarify`** (no markers remain):
+  - **FR-018 (H4)** — a Decision Step reuses the existing optional Step detail
+    fields (instructions/command/expected-result) plus its Options.
+  - **FR-017 (H5)** — publish BLOCKS dangling Option targets, loops, and Decisions
+    with <2 Options; WARNS on unreachable Steps; ALLOWS path endings.
 - Mechanism hotspots H1 (routing reference), H2 (Decision-resolution record), and
   H3 (not-reached state) are named in Assumptions for `/speckit.plan` to resolve as
   ADRs; H3 is already largely settled by the ratified glossary (reuse not-reached).

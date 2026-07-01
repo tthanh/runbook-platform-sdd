@@ -14,6 +14,13 @@ Glossary terms used (binding, per the constitution v1.1.0): **Runbook**, **Runbo
 
 > The branching language (Decision Step Type; Option, Target Step, Taken Path; Computed Review coverage over the taken path) was ratified into the constitution glossary on 2026-06-28 (v1.1.0). This spec uses those terms as binding. It enriches the *shape* of a procedure only — it adds no new way to author Step content (that shipped in rich-steps), no automation, and no condition logic the platform evaluates on the responder's behalf.
 
+## Clarifications
+
+### Session 2026-07-01
+
+- Q: What content does a Decision Step carry, beyond its Options (FR-018 / H4)? → A: It **reuses the existing optional Step detail fields** (instructions / command / expected result) that every Step already has since rich-steps, plus its Options — no field is added or forbidden for the Decision type. Authors typically use the title + instructions to pose the choice; the fields stay optional.
+- Q: Which conditions block publishing a branched Runbook Version (FR-017 / H5)? → A: **BLOCK** — any Option whose Target Step does not exist in the Version; any loop / back-edge (forward-only routing); any Decision Step with fewer than two Options. **WARN (non-blocking)** — a Step unreachable from the start. **ALLOW** — a path that simply ends (a reached Step with no continuation is a valid ending).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Author a branching procedure and freeze it at publish (Priority: P1)
@@ -77,12 +84,13 @@ A reviewer reads the Computed Review of a closed branched Execution and sees cov
 - **A runbook with no Decision Steps**: authored, run, and reviewed exactly as before; its Taken Path is every Step in order, and coverage is every Step.
 - **A runbook authored before this feature**: loads, edits, publishes, runs, and reviews without change; it has no Decision Steps.
 - **Two Options routing to the same Target Step**: allowed; the run simply continues from that Step. No special "branches converge / merge" behavior is defined beyond continuing.
-- **A path that ends** (a Step, or an Option's Target Step, with no continuation): [NEEDS CLARIFICATION: is a path that reaches an end with no further Step a valid ending, or a publish-blocking error? See H5.]
-- **An Option that points at no Step, or at a Step removed before publish**: publishing must not freeze a broken route — an Option with no valid Target Step is caught at publish (see H5).
+- **A path that ends** (a Step, or an Option's Target Step, with no continuation): a valid ending — publishing is allowed; the run simply completes at that Step (H5).
+- **A Step unreachable from the start**: allowed to publish but the author is warned (non-blocking); it is not a broken route (H5).
+- **An Option that points at no Step, or at a Step removed before publish**: publishing is blocked — an Option with no valid Target Step is a broken route (H5).
 - **Reordering or inserting Steps while drafting**: an Option keeps pointing at the Step the author meant; routing never silently re-points to a different Step.
 - **A Decision Step reached but the run closed before choosing**: the Decision Step is not completed; in the Computed Review it is neither a skip nor a taken branch — it was reached but unresolved, and steps beyond it are not reached.
 - **Backward routing / loops**: not expressible — an Option routes forward only; the author cannot create a route back to an earlier Step (loops are out of scope, enforced at publish).
-- **A Decision Step with a single Option, or none**: [NEEDS CLARIFICATION: is a Decision Step required to have at least two Options to be publishable, or is one/zero allowed? See H5.]
+- **A Decision Step with a single Option, or none**: publishing is blocked — a Decision Step must have at least two Options to be publishable (H5).
 
 ## Requirements *(mandatory)*
 
@@ -104,8 +112,8 @@ A reviewer reads the Computed Review of a closed branched Execution and sees cov
 - **FR-014**: WHEN a Computed Review is rendered for a branched Execution, the system MUST show the Option chosen at each Decision Step.
 - **FR-015**: The system MUST NOT evaluate any condition, run any command, read any metric, or otherwise choose a branch automatically — a human always selects the Option.
 - **FR-016**: The system MUST NOT allow an Option to route backward or create a loop; routing is forward-only, enforced at publish.
-- **FR-017**: WHEN a Runbook is published, the system MUST reject a Version whose routing is broken — at minimum, every Option MUST route to a Step that exists in the Version. [NEEDS CLARIFICATION: beyond "every Option targets a real Step and no loops," which publish-time conditions are blocking errors versus author warnings — dead-end paths, unreachable Steps, a Decision Step with fewer than two Options? See H5.]
-- **FR-018**: The system MUST define what content a Decision Step carries. [NEEDS CLARIFICATION: does a Decision Step reuse the rich-step detail fields (instructions / expected result) to pose the choice, or carry only a prompt/label plus its Options? See H4.]
+- **FR-017**: WHEN a Runbook is published, the system MUST reject (block) a Version if any Option's Target Step does not exist in the Version, if any Option routes backward or forms a loop, or if any Decision Step has fewer than two Options. The system MUST warn (without blocking) when a Step is unreachable from the start, and MUST allow a path that simply ends (a reached Step with no continuation is a valid ending).
+- **FR-018**: The system MUST let a Decision Step carry the same optional detail fields as any other Step (instructions, command, expected result) in addition to its Options; it MUST NOT require any of those fields and MUST NOT forbid them for the Decision type.
 - **FR-019**: The system MUST leave a Runbook with no Decision Steps behaving exactly as before this feature across authoring, publish, run, and review.
 - **FR-020**: The system MUST leave Runbook Version immutability, the Version Pin, one-open-Execution-per-Incident, and no-restart behavior unchanged; branching adds routing within a Version only.
 
@@ -113,6 +121,7 @@ A reviewer reads the Computed Review of a closed branched Execution and sees cov
 
 - **Step** (from slice 04): one ordered instruction within a Runbook Version; now its Step Type may be Decision in addition to Action/Check. Action and Check remain descriptive only; Decision changes execution navigation.
 - **Step Type** (extended): the closed set grows by one to Action, Check, or Decision. Decision is the only member that affects navigation.
+- **Decision Step**: a Step whose Step Type is Decision; carries the same optional detail fields as any Step (instructions/command/expected-result, all optional) plus at least two Options. Completing it means choosing an Option, which routes the run.
 - **Option**: a named choice on a Decision Step; carries a label the responder reads and routes to a Target Step. Frozen into the Runbook Version at publish alongside the Step.
 - **Target Step**: the Step an Option routes to; the reference is frozen at publish and survives the Version freeze unchanged.
 - **Taken Path**: the ordered sequence of Steps actually reached in an Execution, determined by the Options chosen at Decision Steps; for a Runbook with no Decision Steps it is every Step in order. It is the denominator for Computed Review coverage.
@@ -138,7 +147,7 @@ A reviewer reads the Computed Review of a closed branched Execution and sees cov
 - **Routing reference mechanism (H1)** — how an Option's Target Step is referenced so it survives reordering and the Version freeze (by stable Step identity vs. by position) is a planning decision (ADR); the spec requires only that routing never silently re-points (FR-003) and freezes immutably (FR-004).
 - **How a chosen Option is recorded (H2)** — whether resolving a Decision is captured as a Step Record outcome or a distinct event is a planning decision (ADR); the spec requires only that which Option was chosen is recorded (FR-008) and shown in the review (FR-014).
 - **Not-reached uses the existing state (H3)** — untaken-branch Steps are reported using the existing not-reached state distinct from skipped, per the ratified Computed Review redefinition (FR-013); confirmed at plan.
-- **Decision Step content (H4)** and **publish-time validation rules (H5)** are the two open clarifications carried into `/speckit.clarify` (FR-018, FR-017).
+- **Decision Step content (H4)** and **publish-time validation rules (H5)** were resolved in the `/speckit.clarify` session 2026-07-01 (see Clarifications): a Decision Step reuses the existing optional Step detail fields plus Options (FR-018); publish blocks dangling targets, loops, and Decisions with <2 Options, warns on unreachable Steps, and allows path endings (FR-017).
 - **Authoring/run UI (H6)** stays within the existing hash-routing navigation with no visual flow-builder (conflict register C-003); how modest the read/edit surface is settles in the spec/plan.
 - **Conflict register** entries this feature is expected to touch — C-001 (sequential Version numbering vs. routing references), C-004 (routing invariants live in the aggregate), C-006 (the closed Step Type enum grows by Decision), and C-007 (routing resolves through the Version Pin) — are checked and resolved during `/speckit.plan`, per the constitution. C-002 (additive migration) applies to the schema change; C-005 (markdown rendering) is unaffected.
 - **No authentication exists**, so no per-Step or per-Decision actor is captured (consistent with the actor deferred until accounts exist).
