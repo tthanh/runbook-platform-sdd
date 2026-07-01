@@ -33,9 +33,10 @@ runs.
 
 This initiative turns those closed runs into something a reviewer can use.
 It adds a **history** — a browsable, searchable list of past Executions across
-incidents — and a **replay** — a way to step through one Execution's Step Records in
-the order they happened, including the path a branched run took and the Option chosen
-at each Decision.
+incidents — and a **replay** — a playback of one Execution's recorded timeline with
+familiar play, pause, and seek controls, moving through the moments in the order they
+happened: the run's start and close, each Step Record's outcome, and — for a branched
+run — each Decision and the Option that was chosen.
 It reads facts already captured; it records nothing new and changes no run.
 
 Constraints touched (pointers for the plan, stated at product level):
@@ -45,6 +46,8 @@ any new outcome (C-004 aggregate behavior is not extended by a read surface).
 Replay must resolve a run against the version it pinned at start, never the latest
 (C-007), and present a run's timeline in the exact order it was recorded (C-009
 ordering rule).
+Replayed step content is shown with the same safe rendering the platform already
+applies to step detail everywhere else (C-005).
 History displays each run's Incident as the external reference the platform holds,
 not as data it owns (C-008).
 Everything stays inside the existing product surface and navigation approach (C-003).
@@ -56,19 +59,26 @@ record the platform already keeps becomes reviewable across runs and moment by m
 
 In scope:
 
-- A **history** view lists past Executions across incidents, most useful first, and
-  lets a reviewer **search** it to locate a specific run rather than re-deriving it
-  from memory.
+- A **history** view lists past Executions across incidents, most recent first (the
+  last incident before older ones), and lets a reviewer **search** it to locate a
+  specific run rather than re-deriving it from memory.
 - Each entry shows enough to recognise the run — the runbook it ran, the incident it
-  responded to (by the reference the platform holds), when it ran, and how it closed.
-- Opening a run offers a **replay**: the reviewer steps through that Execution's Step
-  Records in the order they happened, seeing each step's outcome (done / skipped /
-  failed) as it was recorded.
-- For a branched run, replay follows the **Taken Path**: it shows the Option chosen at
-  each Decision step and continues down that path, and it marks steps on a branch the
-  run did not take as not reached — distinct from a step the responder skipped.
-- A run with no Decision steps replays as a single straight sequence, exactly the
-  order it was recorded.
+  responded to (by the reference the platform holds), when it ran, and a summary of
+  its Computed Review coverage.
+- Opening a run offers a **replay** with play, pause, and seek controls: the reviewer
+  can play the run's timeline, pause on any moment, and seek to any point by moving
+  between moments.
+- The timeline's moments are every recorded moment, in the order they happened: the
+  run's start and close, each Step Record with its outcome (done / skipped / failed),
+  and — for a branched run — each Decision with the Option that was chosen.
+- Playback advances at an **even pace** — a fixed interval between moments — so the
+  seek control is indexed by moment, not by real elapsed time; a long real gap between
+  two events is not stretched out.
+- For a branched run, replay follows the **Taken Path**: it plays the Decisions and
+  their chosen Options in sequence and marks steps on a branch the run did not take as
+  not reached — distinct from a step the responder skipped.
+- A run with no Decision steps replays as a single straight sequence of moments,
+  exactly the order it was recorded.
 - Replay is a faithful reconstruction: it shows only what was recorded, adds nothing,
   loses nothing, and reorders nothing.
 - History and replay change no run: opening, searching, or stepping through a run
@@ -91,6 +101,13 @@ explicitly out, holding the medium appetite:
 - **No live or multi-user replay.**
   Replay reconstructs a closed run after the fact; it is not a live shared session
   multiple people drive together in real time.
+- **No real-time reconstruction or variable-speed playback.**
+  Playback runs at a single even pace between moments; it does not replay the real
+  elapsed time of the incident, stretch out real gaps, or offer speed multipliers or
+  a wall-clock time axis.
+- **No export, print, or shareable-link surface.**
+  History and replay are viewed in the product only; the platform does not download,
+  print, or produce a shareable link to a run or the history list.
 - **No new capture during replay.**
   Stepping through a run adds no note, outcome, or record; replay is strictly a
   reader of what already exists.
@@ -117,10 +134,11 @@ discovery assumptions (~30-engineer SRE org, ~4 reviewable incidents/month).
   Demonstrated by locating a named run in the demo; treated as a hypothesis to
   correct, not a commitment.
 
-- **Replay fidelity: stepping through a run reproduces the order and outcomes exactly
-  as they were recorded.**
-  Basis: replay is worthless if it reorders or omits what happened; a walkthrough must
-  match the run's own record step for step.
+- **Replay fidelity: playing or seeking through a run reproduces the order and
+  outcomes exactly as they were recorded.**
+  Basis: replay is worthless if it reorders or omits what happened; a playback must
+  match the run's own record moment for moment, whether played straight through or
+  seeked to a point.
   Measured by observation against a known run in the demo; treated as a hypothesis to
   correct, not a commitment.
 
@@ -148,13 +166,14 @@ The hotspot ids (H1–H6) are the workshop's; their technical resolution belongs
   The product requirement is only that history and replay are faithful to what was
   recorded — no run appears with a step it did not have, and none loses a step it did.
   Whether that is served by reading the existing append-only records or by re-founding
-  run storage on a new mechanism is a plan-time decision (ADR under the
-  earn-your-complexity principle); the appetite does not mandate a storage rewrite, and
-  if replay is cheaply satisfiable on today's records it must not grow one.
+  how runs are kept on a new mechanism is a plan-time decision (ADR under the
+  earn-your-complexity principle); the appetite does not mandate a rewrite, and if
+  replay is cheaply satisfiable on today's records it must not grow one.
 
 - **How a branched run replays (H2).**
-  Replay must present the Taken Path: the Option chosen at each Decision step, the path
-  the run continued down, and the steps on branches not taken shown as not reached.
+  Settled at product level: each Decision appears as its own moment on the timeline,
+  showing the Option that was chosen, and the run plays down the Taken Path with steps
+  on branches not taken shown as not reached.
   This depends on 05-branching having shipped; how the chosen Option is read back for
   the timeline is a plan-time decision (ADR).
 
@@ -166,20 +185,21 @@ The hotspot ids (H1–H6) are the workshop's; their technical resolution belongs
   displayed?]
 
 - **How replay makes its order stable and what it can show about "who" (H4).**
-  Replay presents the run's timeline in the exact order it was recorded, and that order
-  must be reproducible for the same run every time — including when two records share a
-  moment.
+  Playback advances at an even pace between moments and does not reconstruct the real
+  elapsed time of the incident (settled at product level); it still presents the moments
+  in the exact order they were recorded, and that order must be reproducible for the
+  same run every time — including when two records share a timestamp.
   The product requirement is a stable, faithful order; the tie-breaking rule is a
   plan-time detail (C-009).
-  Replay shows *what happened and when*, not *who did it* — no run captures an actor
-  yet, so replay must not imply one.
+  Replay shows *what happened and in what order*, not *who did it* — no run captures an
+  actor yet, so replay must not imply one.
 
 - **How far the history and replay surfaces go (H5).**
-  A reviewer needs to browse and search the list and step through one run, within the
-  existing navigation approach (C-003) and without new heavy interface machinery.
-  Where the surfaces stop is part of the appetite and is settled in the spec and plan;
-  if the medium appetite overruns, search is dropped before replay, and replay before
-  shipping nothing.
+  Settled for replay: a play / pause / seek transport over the run's moments, within the
+  existing navigation approach (C-003) and without new heavy interface machinery. Still
+  open: what the search surface over history covers (see H3), and the cut line — if the
+  medium appetite overruns, search is dropped before replay, and replay before shipping
+  nothing.
 
 - **How history presents runs across incidents when Incident is external (H6).**
   History spans incidents, but the platform holds only a reference to each Incident, not
