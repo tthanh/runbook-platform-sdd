@@ -24,7 +24,7 @@ During Spec Kit commands specifically, your touchpoints into docs/ are:
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
-at specs/004-rich-steps/plan.md
+at specs/005-branching/plan.md
 <!-- SPECKIT END -->
 
 Shell notes (required before running dotnet or dotnet-ef):

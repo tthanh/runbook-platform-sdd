@@ -1,8 +1,8 @@
 number: 5
 title: branching
-status: Specify
+status: Plan
 created: 2026-06-28
 last-updated: 2026-07-01
-adrs: []
+adrs: [0008, 0009, 0010]
 spec-folder: specs/005-branching
 release-tag: null
