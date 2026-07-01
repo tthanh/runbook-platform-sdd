@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain
+- [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -31,10 +31,10 @@
 
 ## Notes
 
-- **One deliberate `[NEEDS CLARIFICATION]` remains** — FR-016, the searchable
-  attributes of history (PRD open question H3). This is intentionally left for
-  `/speckit.clarify` to resolve rather than guessed; it does not block planning of
-  US1 (browse) or US2 (replay), only US3 (search). All other items pass.
+- **Resolved 2026-07-01 via `/speckit.clarify`** — FR-016 searchable attributes
+  (PRD open question H3): free-text search over Runbook name + Incident reference;
+  time and coverage displayed but not searchable. No `[NEEDS CLARIFICATION]` markers
+  remain. All checklist items pass.
 - Conflict-register entries the spec expects to touch (C-003/C-004/C-005/C-007/
   C-008/C-009) are named in Assumptions for `/speckit.plan` to resolve, per the
   constitution.

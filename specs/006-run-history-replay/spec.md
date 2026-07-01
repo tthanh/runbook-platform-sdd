@@ -14,6 +14,12 @@ Glossary terms used (binding, per the constitution): **Execution**, **Step Recor
 
 > This feature is **read-only**: it surfaces facts already captured by the execution slice (03) and enriched by branching (05). It introduces no new domain events, no new captured outcome, and no new glossary terms — "run history" and "replay" are capability names, not domain terms. Build is **gated behind 05-branching's release**, because replay presents the Taken Path and the Option chosen at each Decision.
 
+## Clarifications
+
+### Session 2026-07-01
+
+- Q: Which attributes can a reviewer search history by (FR-016 / PRD open question H3)? → A: Free-text search over the **Runbook name** and the **Incident reference** only; the run's time and Computed Review coverage summary are displayed on each entry but are **not** searchable/filterable. Keeps search to the two identifiers a reviewer knows and holds it short of the cross-run-analytics non-goal. (Recommended option applied; no explicit selection was made.)
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Browse a history of past runs across incidents (Priority: P1)
@@ -62,11 +68,11 @@ A reviewer with a specific past run in mind searches the history to find it dire
 
 **Why this priority**: Search refines browsing (US1) and is the first capability cut if the appetite overruns. It adds convenience once a history exists, but the history is usable without it.
 
-**Independent Test**: With several closed Executions in the history, search by a supported attribute and confirm only matching runs are shown, and that a known run can be located without scrolling the whole list.
+**Independent Test**: With several closed Executions in the history, search by Runbook name and by Incident reference and confirm only matching runs are shown, and that a known run can be located without scrolling the whole list.
 
 **Acceptance Scenarios** (EARS):
 
-1. WHEN a reviewer searches the history, THE SYSTEM SHALL show only the closed Executions that match the search and SHALL preserve the most-recent-first ordering among them.
+1. WHEN a reviewer searches the history by text matching a Runbook name or an Incident reference, THE SYSTEM SHALL show only the closed Executions that match and SHALL preserve the most-recent-first ordering among them.
 2. WHEN a search matches no runs, THE SYSTEM SHALL indicate that no runs match, without error.
 3. WHEN a reviewer clears the search, THE SYSTEM SHALL restore the full most-recent-first history.
 
@@ -103,7 +109,7 @@ A reviewer with a specific past run in mind searches the history to find it dire
 - **FR-013**: The system MUST render authored Step detail shown during replay with the same safe rendering applied to Step detail elsewhere, so that replaying a run cannot execute or inject active content.
 - **FR-014**: The system MUST order moments that share a timestamp deterministically, so that the same run replays in the same order every time.
 - **FR-015**: The system MUST present replay moments as what happened and in what order, and MUST NOT attribute any moment to a specific actor.
-- **FR-016**: The system MUST let a reviewer search the history to locate a specific run, showing only matching closed Executions while preserving most-recent-first ordering, and MUST restore the full history when the search is cleared. [NEEDS CLARIFICATION: which attributes are searchable — the Runbook, the Incident reference, a date/time range, coverage/outcome — and are any of these only displayed rather than searchable?]
+- **FR-016**: The system MUST let a reviewer search the history by free text over the Runbook name and the Incident reference, showing only closed Executions that match while preserving most-recent-first ordering, and MUST restore the full history when the search is cleared. The run's time and Computed Review coverage summary are displayed on each entry but are NOT searchable or filterable.
 - **FR-017**: The system MUST display and group history entries by the Incident reference it holds, without modeling, storing, or owning Incident data beyond that reference.
 - **FR-018**: The system MUST NOT provide a compare/diff of two runs, cross-run analytics or reporting, postmortem narrative authoring, live or multi-user replay, or an export/print/shareable-link surface.
 - **FR-019**: The system MUST reuse the existing run outcome states (done / skipped / failed / not reached) and MUST NOT introduce a new outcome state for history or replay.
