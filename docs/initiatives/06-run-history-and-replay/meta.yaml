@@ -1,8 +1,8 @@
 number: 6
 title: run-history-and-replay
-status: PRD
+status: Specify
 created: 2026-07-01
 last-updated: 2026-07-01
 adrs: []
-spec-folder: null
+spec-folder: specs/006-run-history-replay
 release-tag: null
